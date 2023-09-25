@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-__all__ = ("return_three",)
+from .type_lens import TypeLens
 
-
-def return_three() -> int:
-    return 3
+__all__ = ("TypeLens",)

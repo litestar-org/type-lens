@@ -94,6 +94,7 @@ line-length = 120
 include = '\.pyi?$'
 
 [tool.codespell]
+ignore-words-list = "te"
 skip = 'pdm.lock'
 
 [tool.coverage.run]
@@ -133,6 +134,9 @@ show_error_codes = true
 select = ["ALL"]
 ignore = [
     "A003", # flake8-builtins - class attribute {name} is shadowing a python builtin
+    "ANN101", # flake8-annotations - missing type annotation for self in method
+    "ANN102", # flake8-annotations - missing type annotation for cls in classmethod
+    "ANN401", # flake8-annotations - dynamically typed expressions (typing.Any) are disallowed
     "B010", # flake8-bugbear - do not call setattr with a constant attribute value
     "D100", # pydocstyle - missing docstring in public module
     "D101", # pydocstyle - missing docstring in public class
