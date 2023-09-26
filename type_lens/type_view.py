@@ -9,11 +9,11 @@ from typing_extensions import Annotated, NotRequired, Required, get_args, get_or
 from type_lens.types import UNION_TYPES, NoneType
 from type_lens.utils import get_generic_origin, get_instantiable_origin, unwrap_annotation
 
-__all__ = ("TypeLens",)
+__all__ = ("TypeView",)
 
 
 @dataclass(frozen=True, init=False)
-class TypeLens:
+class TypeView:
     """Represents a type annotation."""
 
     __slots__ = (
@@ -53,7 +53,7 @@ class TypeLens:
 
     This is to serve safely rebuilding a generic outer type with different args at runtime.
     """
-    inner_types: tuple[TypeLens, ...]
+    inner_types: tuple[TypeView, ...]
     """The type's generic args parsed as ``ParsedType``, if applicable."""
 
     def __init__(self, annotation: Any) -> None:
@@ -82,10 +82,10 @@ class TypeLens:
         object.__setattr__(self, "is_required", Required in wrappers)
         object.__setattr__(self, "is_not_required", NotRequired in wrappers)
         object.__setattr__(self, "generic_origin", get_generic_origin(origin, unwrapped))
-        object.__setattr__(self, "inner_types", tuple(TypeLens(arg) for arg in args))
+        object.__setattr__(self, "inner_types", tuple(TypeView(arg) for arg in args))
 
     def __eq__(self, other: object) -> bool:
-        if not isinstance(other, TypeLens):
+        if not isinstance(other, TypeView):
             return False
 
         if self.origin:
