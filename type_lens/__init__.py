@@ -1,5 +1,5 @@
 from __future__ import annotations
 
-from .type_lens import TypeLens
+from .type_view import TypeView
 
-__all__ = ("TypeLens",)
+__all__ = ("TypeView",)

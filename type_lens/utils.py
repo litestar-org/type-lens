@@ -17,7 +17,7 @@ __all__ = (
 _WRAPPER_TYPES: te.Final = {te.Annotated, te.Required, te.NotRequired}
 """Types that always contain a wrapped type annotation as their first arg."""
 
-_GENERIC_ORIGIN_MAP: te.Final = {
+_GENERIC_ORIGIN_MAP: te.Final[dict[t.Any, t.Any]] = {
     set: t.AbstractSet,
     defaultdict: t.DefaultDict,
     deque: t.Deque,
