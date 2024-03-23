@@ -5,7 +5,7 @@
 groups = ["default", "docs", "lint", "test"]
 strategy = ["cross_platform"]
 lock_version = "4.4.1"
-content_hash = "sha256:8d060764440a568531b9abfb0a65b163534f18b680757ad714bb4c47b9143727"
+content_hash = "sha256:91b21d56b36bf2c80890692ef25d6376e14326f1ee1222cede2498ba7057398a"
 
 [[package]]
 name = "alabaster"
@@ -1169,15 +1169,15 @@ files = [
 
 [[package]]
 name = "shibuya"
-version = "2024.3.1"
+version = "2023.10.26"
 requires_python = ">=3.7"
 summary = "A clean, responsive, and customizable Sphinx documentation theme with light/dark mode."
 dependencies = [
     "Sphinx",
 ]
 files = [
-    {file = "shibuya-2024.3.1-py3-none-any.whl", hash = "sha256:c70fa64120175ac782ba04ff5c45736e1fe10cc01afb74f9e305b3408af2498a"},
-    {file = "shibuya-2024.3.1.tar.gz", hash = "sha256:8dad19bb9f85a5c25270a5dea62aaf8ae97daf4fa546df476931847f1b1bbe4e"},
+    {file = "shibuya-2023.10.26-py3-none-any.whl", hash = "sha256:e8a8647005a410d929fe4fdd3af2b88c156efbca8582ce3803ebd7771d08cebb"},
+    {file = "shibuya-2023.10.26.tar.gz", hash = "sha256:878f866a8720776c878ff1d9e17f7731cf8923859ff6fec77999b469477764a1"},
 ]
 
 [[package]]
