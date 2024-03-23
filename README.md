@@ -11,6 +11,12 @@
 
 </div>
 
+> **Warning**: Pre-Release Alpha Stage
+>
+> Please note that `type-lens` is currently in a pre-release alpha stage of development. This means the library is still
+> under active development, and its API is subject to change. We encourage developers to experiment with `type-lens` and
+> provide feedback, but we recommend against using it in production environments until a stable release is available.`
+
 ## About
 
 `type-lens` is a library that allows for utilizing Python types at runtime.
