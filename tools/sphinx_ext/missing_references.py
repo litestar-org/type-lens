@@ -1,4 +1,5 @@
 """Sphinx extension for changelog and change directives."""
+
 from __future__ import annotations
 
 import ast
@@ -7,11 +8,13 @@ import inspect
 import re
 from functools import cache
 from pathlib import Path
-from typing import TYPE_CHECKING, Generator
+from typing import TYPE_CHECKING
 
 from docutils.utils import get_source_line
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     from docutils.nodes import Element, Node
     from sphinx.addnodes import pending_xref
     from sphinx.application import Sphinx
@@ -44,7 +47,7 @@ def get_module_global_imports(module_import_path: str, reference_target_source_o
     return {path.asname or path.name for import_node in import_nodes for path in import_node.names}
 
 
-def on_warn_missing_reference(app: Sphinx, domain: str, node: Node) -> bool | None:  # noqa: PLR0911
+def on_warn_missing_reference(app: Sphinx, domain: str, node: Node) -> bool | None:
     ignore_refs: dict[str | re.Pattern, set[str] | re.Pattern] = app.config["ignore_missing_refs"]
     if node.tagname != "pending_xref":  # type: ignore[attr-defined]
         return None

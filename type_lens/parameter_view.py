@@ -13,7 +13,9 @@ __all__ = ("ParameterView",)
 
 if TYPE_CHECKING:
     from inspect import Parameter
-    from typing import Any, Self
+    from typing import Any
+
+    from typing_extensions import Self
 
 
 @dataclass(frozen=True)

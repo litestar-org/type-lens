@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 from collections import abc
+from collections.abc import Collection, Mapping
 from dataclasses import dataclass
-from typing import Any, AnyStr, Collection, ForwardRef, Mapping, TypeVar
+from typing import Annotated, Any, AnyStr, ForwardRef, TypeVar
 
-from typing_extensions import Annotated, NotRequired, Required, get_args, get_origin
+from typing_extensions import NotRequired, Required, get_args, get_origin
 
 from type_lens.types import UNION_TYPES, NoneType
-from type_lens.utils import get_generic_origin, get_instantiable_origin, unwrap_annotation
+from type_lens.utils import get_instantiable_origin, unwrap_annotation
 
 __all__ = ("TypeView",)
 
@@ -81,7 +82,6 @@ class TypeView:
         object.__setattr__(self, "is_annotated", Annotated in wrappers)
         object.__setattr__(self, "is_required", Required in wrappers)
         object.__setattr__(self, "is_not_required", NotRequired in wrappers)
-        object.__setattr__(self, "generic_origin", get_generic_origin(origin, unwrapped))
         object.__setattr__(self, "inner_types", tuple(TypeView(arg) for arg in args))
 
     def __eq__(self, other: object) -> bool:

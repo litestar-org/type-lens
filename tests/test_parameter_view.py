@@ -3,7 +3,6 @@ from __future__ import annotations
 from inspect import Parameter
 
 import pytest
-
 from type_lens.exc import ParameterViewError
 from type_lens.parameter_view import ParameterView
 from type_lens.types import Empty

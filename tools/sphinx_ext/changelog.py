@@ -1,4 +1,5 @@
 """Sphinx extension for changelog and change directives."""
+
 from __future__ import annotations
 
 from functools import partial

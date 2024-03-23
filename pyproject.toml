@@ -4,12 +4,15 @@ authors = [
     {name = "Janek Nouvertné", email = "provinzkraut@posteo.de"},
     {name = "Jacob Coffee", email = "jacob@z7x.org"},
     {name = "Peter Schutt", email = "peter.github@proton.me"},
+    {name = "Visakh Unnikrishnan", email = "guacs.guacs@gmail.com"},
 ]
 maintainers = [
+    {name = "Jolt Developers", email = "maintainers@jolt.rs"},
     {name = "Cody Fincher", email = "cody.fincher@gmail.com"},
     {name = "Janek Nouvertné", email = "provinzkraut@posteo.de"},
     {name = "Jacob Coffee", email = "jacob@z7x.org"},
     {name = "Peter Schutt", email = "peter.github@proton.me"},
+    {name = "Visakh Unnikrishnan", email = "guacs.guacs@gmail.com"},
 ]
 keywords = [
     "programming",
@@ -24,7 +27,6 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -40,7 +42,7 @@ version = "0.1.0"
 description = "type-lens is a Python template project designed to simplify the setup of a new project."
 readme = "README.md"
 license = {text = "MIT"}
-requires-python = ">=3.8,<4.0"
+requires-python = ">=3.9,<4.0"
 
 [project.urls]
 "Issue Tracker" = "https://github.com/jolt-org/type-lens/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc"
@@ -51,47 +53,40 @@ homepage = "https://jolt.rs/"
 repository = "https://github.com/jolt-org/type-lens"
 documentation = "https://docs.type-lens.jolt.rs/"
 
+[tool.pdm.dev-dependencies]
+docs = [
+    "auto-pytabs[sphinx]>=0.4.0",
+    "shibuya>=2023.10.26",
+    "sphinx-autobuild>=2021.3.14",
+    "sphinx-click>=4.4.0",
+    "sphinx-copybutton>=0.5.2",
+    "sphinx-design>=0.5.0",
+    "sphinx-toolbox>=3.5.0",
+    "sphinx>=7.1.2",
+    "sphinxcontrib-mermaid>=0.9.2",
+]
+lint = [
+    "codecov-cli",
+    "mypy",
+    "pre-commit",
+    "pyright",
+    "ruff",
+]
+test = [
+    "covdefaults",
+    "pytest",
+    "pytest-cov",
+]
+
+[tool.pdm.scripts]
+ci = {composite = ["lint", "test"]}
+docs-serve = "sphinx-autobuild docs docs/_build/ -j auto --watch dtos --watch docs --watch tests --port 8002"
+lint = "pre-commit run --all-files"
+test = "pytest"
+
 [build-system]
 build-backend = "hatchling.build"
 requires = ["hatchling"]
-
-[tool.pdm.scripts]
-lint = "pre-commit run --all-files"
-test = "pytest"
-docs-serve = "sphinx-autobuild docs docs/_build/ -j auto --watch type_lens --watch docs --watch tests --port 8002"
-ci = {composite = ["lint", "test"]}
-
-[tool.pdm.dev-dependencies]
-docs = [
-  "sphinx>=7.1.2",
-  "sphinx-autobuild>=2021.3.14",
-  "sphinx-copybutton>=0.5.2",
-  "shibuya>=2023.9.3",
-  "sphinx-click>=5.0.1",
-  "sphinx-toolbox>=3.5.0",
-  "blacken-docs>=1.16.0",
-  "sphinx-design>=0.5.0",
-]
-lint = [
-    "black>=23.9.1",
-    "ruff>=0.0.289",
-    "codespell>=2.2.5",
-    "mypy>=1.5.1",
-    "pre-commit>=3.4.0",
-    "blacken-docs>=1.16.0",
-    "shellcheck-py>=0.9.0.5",
-    "pyright>=1.1.327",
-    "sourcery>=1.9.0",
-]
-test = [
-    "pytest>=7.4.2",
-    "pytest-asyncio>=0.21.1",
-    "pytest-cov>=4.1.0",
-]
-
-[tool.black]
-line-length = 120
-include = '\.pyi?$'
 
 [tool.codespell]
 ignore-words-list = "te"
@@ -99,44 +94,88 @@ skip = 'pdm.lock'
 
 [tool.coverage.run]
 omit = ["*/tests/*"]
+plugins = ["covdefaults"]
+source = ["type_lens"]
 
 [tool.coverage.report]
-exclude_lines = [
-    'pragma: no cover',
-    'if TYPE_CHECKING:',
-    'raise NotImplementedError',
-]
+fail-under = 100
 
 [tool.pytest.ini_options]
-# addopts = "--ignore=examples"
-asyncio_mode = "auto"
+addopts = "--strict-markers --strict-config"
+testpaths = ["tests"]
+xfail_strict = true
+
+[tool.mypy]
+packages = ["type_lens", "tests"]
+python_version = "3.9"
+
+disallow_any_generics = false
+disallow_untyped_decorators = true
+enable_error_code = "ignore-without-code"
+implicit_reexport = false
+show_error_codes = true
+strict = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
 
 [tool.pyright]
-include = ["type_lens"]
-exclude = ["tools"]
+disableBytesTypePromotions = true
+exclude = [
+    "tools",
+    "docs",
+]
+include = ["type_lens", "tests"]
+pythonVersion = "3.9"
+reportUnnecessaryTypeIgnoreComments = true
+
 
 [tool.slotscheck]
 strict-imports = false
 
-[tool.mypy]
-warn_unused_ignores = true
-warn_redundant_casts = true
-warn_unused_configs = true
-warn_unreachable = true
-warn_return_any = true
-strict = true
-disallow_untyped_decorators = true
-disallow_any_generics = true
-implicit_reexport = false
-show_error_codes = true
-
 [tool.ruff]
-select = ["ALL"]
-ignore = [
+lint.select = [
+    "A", # flake8-builtins
+    "B", # flake8-bugbear
+    "BLE", # flake8-blind-except
+    "C4", # flake8-comprehensions
+    "C90", # mccabe
+    "D", # pydocstyle
+    "DJ", # flake8-django
+    "DTZ", # flake8-datetimez
+    "E", # pycodestyle errors
+    "ERA", # eradicate
+    "EXE", # flake8-executable
+    "F", # pyflakes
+    "G", # flake8-logging-format
+    "I", # isort
+    "ICN", # flake8-import-conventions
+    "ISC", # flake8-implicit-str-concat
+    "N", # pep8-naming
+    "PIE", # flake8-pie
+    "PLC", # pylint - convention
+    "PLE", # pylint - error
+    "PLW", # pylint - warning
+    "PTH", # flake8-use-pathlib
+    "Q", # flake8-quotes
+    "RET", # flake8-return
+    "RUF", # Ruff-specific rules
+    "S", # flake8-bandit
+    "SIM", # flake8-simplify
+    "T10", # flake8-debugger
+    "T20", # flake8-print
+    "TCH", # flake8-type-checking
+    "TID", # flake8-tidy-imports
+    "UP", # pyupgrade
+    "W", # pycodestyle - warning
+    "YTT", # flake8-2020
+]
+
+line-length = 120
+lint.ignore = [
     "A003", # flake8-builtins - class attribute {name} is shadowing a python builtin
-    "ANN101", # flake8-annotations - missing type annotation for self in method
-    "ANN102", # flake8-annotations - missing type annotation for cls in classmethod
-    "ANN401", # flake8-annotations - dynamically typed expressions (typing.Any) are disallowed
     "B010", # flake8-bugbear - do not call setattr with a constant attribute value
     "D100", # pydocstyle - missing docstring in public module
     "D101", # pydocstyle - missing docstring in public class
@@ -149,28 +188,31 @@ ignore = [
     "D202", # pydocstyle - no blank lines allowed after function docstring
     "D205", # pydocstyle - 1 blank line required between summary line and description
     "D415", # pydocstyle - first line should end with a period, question mark, or exclamation point
-    "E501", # pycodestyle line too long, handled by black
-    "PLW2901"  # pylint - for loop variable overwritten by assignment target
+    "E501", # pycodestyle line too long, handled by ruff format
+    "PLW2901", # pylint - for loop variable overwritten by assignment target
+    "RUF012", # Ruff-specific rule - annotated with classvar
+    "ISC001", # Ruff formatter incompatible
 ]
-line-length = 120
 src = ["type_lens", "tests", "docs/examples"]
-target-version = "py38"
+target-version = "py39"
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"
 
-[tool.ruff.mccabe]
+[tool.ruff.lint.mccabe]
 max-complexity = 12
 
-[tool.ruff.pep8-naming]
+[tool.ruff.lint.pep8-naming]
 classmethod-decorators = [
     "classmethod",
 ]
 
-[tool.ruff.isort]
-known-first-party = ["type_lens", "tests", "examples"]
+[tool.ruff.lint.isort]
+known-first-party = ["dtos", "tests", "examples"]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
+"docs/**/*.*" = ["S", "B", "DTZ", "A", "TCH", "ERA", "D", "RET"]
+"docs/examples/**" = ["T201"]
 "tests/**/*.*" = [
     "A",
     "ARG",
@@ -195,29 +237,9 @@ known-first-party = ["type_lens", "tests", "examples"]
     "TCH",
     "TRY",
 ]
-"docs/examples/tests/**/*.*" = [
-    "A",
-    "ARG",
-    "B",
-    "BLE",
-    "C901",
-    "D",
-    "DTZ",
-    "EM",
-    "FBT",
-    "G",
-    "N",
-    "PGH",
-    "PIE",
-    "PLR",
-    "PLW",
-    "PTH",
-    "RSE",
-    "S",
-    "S101",
-    "SIM",
-    "TCH",
-    "TRY",
-]
-"docs/**/*.*" = ["S", "B", "DTZ", "A", "TCH", "ERA", "D", "RET", "INP", "ARG", "TD", "FIX"]
-"tools/**/*.*" = ["D", "ARG", "EM", "TRY", "G", "FBT", "ANN"]
+"tools/**/*.*" = ["D", "ARG", "EM", "TRY", "G", "FBT"]
+"tools/prepare_release.py" = ["S603", "S607"]
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 88

@@ -13,29 +13,15 @@
 
 ## About
 
-This project is a template repository for [Jolt][jolt-org] projects. It is designed to be a starting point for
-any project that is a part of the Jolt organization.
+`type-lens` is a library that allows for utilizing Python types at runtime.
 
 ## Usage
 
-- [Install copier](https://copier.readthedocs.io/en/stable/#installation)
-- `$ copier copy gh:jolt-org/project-template $new-project-name`
-- Answer questions.
+- Install `type-lens` with `pip` or check out [our installation guide][install-guide]
 
-## New project checklist
-
-- [ ] Create the https://github.com/jolt-org/type-lens repository.
-- [ ] If using docs: Create the https://github.com/jolt-org/type-lens-docs-preview repository.
-- [ ] If not using docs: remove `.github/workflows/docs-preview.yaml`.
-- [ ] Update the [README.md](README.md) file with the project-specific information.
-- [ ] Initialize git repository: `$ git init`
-- [ ] Stage the files: `$ git add ."`
-- [ ] Install pre-commit hooks: `$ pre-commit install`
-- [ ] Run pre-commit hooks: `$ pre-commit run --all-files`
-- [ ] Stage any files that were modified by the pre-commit hooks: `$ git add .`
-- [ ] Commit the changes: `$ git commit -m "Initial commit"`
-- [ ] Add the remote: `$ git remote add origin git@github.com:jolt-org/type-lens.git`
-- [ ] Push the changes: `$ git push -u origin main`
+```shell
+pip install type-lens
+```
 
 ## Contributing
 

@@ -23,6 +23,7 @@ target/
 *.iml
 .DS_Store
 .coverage
+.dmypy.json
 .python-version
 .ruff_cache
 /docs/_build/
