@@ -43,6 +43,8 @@ description = "type-lens is a Python template project designed to simplify the s
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.9,<4.0"
+dependencies = [
+]
 
 [project.urls]
 "Issue Tracker" = "https://github.com/jolt-org/type-lens/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc"
