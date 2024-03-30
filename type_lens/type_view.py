@@ -7,7 +7,7 @@ from typing import Annotated, Any, AnyStr, ForwardRef, TypeVar
 
 from typing_extensions import NotRequired, Required, get_args, get_origin
 
-from type_lens.types import UNION_TYPES, NoneType
+from type_lens.types.builtins import UNION_TYPES, NoneType
 from type_lens.utils import get_instantiable_origin, unwrap_annotation
 
 __all__ = ("TypeView",)

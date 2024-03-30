@@ -5,7 +5,7 @@ from inspect import Parameter
 import pytest
 from type_lens.exc import ParameterViewError
 from type_lens.parameter_view import ParameterView
-from type_lens.types import Empty
+from type_lens.types.empty import Empty
 
 
 def test_param_view() -> None:
