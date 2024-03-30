@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from collections import abc
 from collections.abc import Collection, Mapping
-from dataclasses import dataclass
-from typing import Annotated, Any, AnyStr, ForwardRef, TypeVar
+from typing import Annotated, Any, AnyStr, Final, ForwardRef, TypeVar
 
 from typing_extensions import NotRequired, Required, get_args, get_origin
 
@@ -13,49 +12,22 @@ from type_lens.utils import get_instantiable_origin, unwrap_annotation
 __all__ = ("TypeView",)
 
 
-@dataclass(frozen=True, init=False)
 class TypeView:
     """Represents a type annotation."""
 
-    __slots__ = (
-        "annotation",
-        "args",
-        "generic_origin",
-        "inner_types",
-        "instantiable_origin",
-        "is_annotated",
-        "is_not_required",
-        "is_required",
-        "metadata",
-        "origin",
-        "raw",
-    )
-
-    raw: Any
-    """The annotation exactly as received."""
-    annotation: Any
-    """The annotation with any "wrapper" types removed, e.g. Annotated."""
-    origin: Any
-    """The result of calling ``get_origin(annotation)`` after unwrapping Annotated, e.g. list."""
-    args: tuple[Any, ...]
-    """The result of calling ``get_args(annotation)`` after unwrapping Annotated, e.g. (int,)."""
-    metadata: tuple[Any, ...]
-    """Any metadata associated with the annotation via ``Annotated``."""
-    instantiable_origin: Any
-    """An equivalent type to ``origin`` that can be safely instantiated. E.g., ``Sequence`` -> ``list``."""
-    is_annotated: bool
-    """Whether the annotation included ``Annotated`` or not."""
-    is_required: bool
-    """Whether the annotation included ``Required`` or not."""
-    is_not_required: bool
-    """Whether the annotation included ``NotRequired`` or not."""
-    generic_origin: Any
-    """An equivalent type to ``origin`` that can be safely used as a generic type across all supported Python versions.
-
-    This is to serve safely rebuilding a generic outer type with different args at runtime.
-    """
-    inner_types: tuple[TypeView, ...]
-    """The type's generic args parsed as ``ParsedType``, if applicable."""
+    __slots__ = {
+        "annotation": "The annotation with any 'wrapper' types removed, e.g. Annotated.",
+        "args": "The result of calling get_args(annotation) after unwrapping Annotated, e.g. (int,).",
+        "generic_origin": "An equivalent type to origin that can be safely used as a generic type across all supported Python versions.",
+        "inner_types": "The type's generic args parsed as ParsedType, if applicable.",
+        "instantiable_origin": "An equivalent type to origin that can be safely instantiated. E.g., Sequence -> list.",
+        "is_annotated": "Whether the annotation included Annotated or not.",
+        "is_not_required": "Whether the annotation included NotRequired or not.",
+        "is_required": "Whether the annotation included Required or not.",
+        "metadata": "Any metadata associated with the annotation via Annotated.",
+        "origin": "The result of calling get_origin(annotation) after unwrapping Annotated, e.g. list.",
+        "raw": "The annotation exactly as received.",
+    }
 
     def __init__(self, annotation: Any) -> None:
         """Initialize ParsedType.
@@ -73,16 +45,16 @@ class TypeView:
 
         args = () if origin is abc.Callable else get_args(unwrapped)
 
-        object.__setattr__(self, "raw", annotation)
-        object.__setattr__(self, "annotation", unwrapped)
-        object.__setattr__(self, "origin", origin)
-        object.__setattr__(self, "args", args)
-        object.__setattr__(self, "metadata", metadata)
-        object.__setattr__(self, "instantiable_origin", get_instantiable_origin(origin, unwrapped))
-        object.__setattr__(self, "is_annotated", Annotated in wrappers)
-        object.__setattr__(self, "is_required", Required in wrappers)
-        object.__setattr__(self, "is_not_required", NotRequired in wrappers)
-        object.__setattr__(self, "inner_types", tuple(TypeView(arg) for arg in args))
+        self.raw: Final = annotation
+        self.annotation: Final = unwrapped
+        self.origin: Final = origin
+        self.args: Final = args
+        self.metadata: Final = metadata
+        self.instantiable_origin: Final = get_instantiable_origin(origin, unwrapped)
+        self.is_annotated: Final = Annotated in wrappers
+        self.is_required: Final = Required in wrappers
+        self.is_not_required: Final = NotRequired in wrappers
+        self.inner_types: Final = tuple(TypeView(arg) for arg in args)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, TypeView):
