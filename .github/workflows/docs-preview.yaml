@@ -37,7 +37,7 @@ jobs:
         with:
           folder: docs-preview/docs/_build/html
 
-          token: ${{ secrets.DOCS_PREVIEW_DEPLOY_TOKEN }}
+          ssh-key: ${{ secrets.DOCS_PREVIEW_DEPLOY_KEY }}
 
           repository-name: jolt-org/type-lens-docs-preview
           clean: false
