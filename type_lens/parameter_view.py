@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from inspect import Signature
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Final
 
 from type_lens.exc import ParameterViewError
 from type_lens.type_view import TypeView
@@ -18,22 +17,19 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
 
-@dataclass(frozen=True)
 class ParameterView:
     """Represents the parameters of a callable."""
 
-    __slots__ = (
-        "name",
-        "default",
-        "type_view",
-    )
+    __slots__ = {
+        "name": "The name of the parameter.",
+        "default": "The default value of the parameter.",
+        "type_view": "View of the parameter's annotation type.",
+    }
 
-    name: str
-    """The name of the parameter."""
-    default: Any | Empty
-    """The default value of the parameter."""
-    type_view: TypeView
-    """View of the parameter's annotation type."""
+    def __init__(self, name: str, type_view: TypeView, *, default: Any | EmptyType = Empty) -> None:
+        self.name: Final = name
+        self.type_view: Final = type_view
+        self.default: Final = default
 
     @property
     def has_default(self) -> bool:
