@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 from type_lens.exc import ParameterViewError
 from type_lens.type_view import TypeView
-from type_lens.types import Empty
+from type_lens.types.empty import Empty, EmptyType
 
 __all__ = ("ParameterView",)
 

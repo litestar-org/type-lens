@@ -3,7 +3,7 @@ from __future__ import annotations
 import sys
 from typing import Union
 
-__all__ = ["UNION_TYPES", "Empty", "NoneType"]
+__all__ = ["UNION_TYPES", "NoneType"]
 
 if sys.version_info >= (3, 10):
     from types import UnionType
@@ -13,7 +13,3 @@ else:  # pragma: no cover
     UNION_TYPES = {Union}
 
 NoneType: type[None] = type(None)
-
-
-class Empty:
-    """A sentinel class used as placeholder."""
