@@ -152,7 +152,7 @@ html_theme_options = {
                 {
                     "title": "1.x Changelog",
                     "url": "changelog",
-                    "summary": "All changes in the 2.x series",
+                    "summary": "All changes in the 1.x series",
                 },
             ],
         },
