@@ -1,4 +1,6 @@
 # Configuration file for the Sphinx documentation builder.
+from __future__ import annotations
+
 import os
 from datetime import datetime
 from functools import partial
@@ -6,19 +8,18 @@ from typing import TYPE_CHECKING, Any
 
 from type_lens.__metadata__ import __project__, __version__
 
+if TYPE_CHECKING:
+    from sphinx.addnodes import document
+    from sphinx.application import Sphinx
+
 __all__ = (
     "delayed_setup",
     "setup",
     "update_html_context",
 )
 
-
-if TYPE_CHECKING:
-    from sphinx.addnodes import document
-    from sphinx.application import Sphinx
-
 # -- Environmental Data ------------------------------------------------------
-
+suppress_warnings = ["config.cache"]
 
 # -- Project information -----------------------------------------------------
 current_year = datetime.now().year
@@ -73,6 +74,10 @@ autodoc_type_aliases = {"FilterTypes": "FilterTypes"}
 
 autosectionlabel_prefix_document = True
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+
+auto_pytabs_min_version = (3, 9)
+auto_pytabs_max_version = (3, 12)
+auto_pytabs_compat_mode = True
 
 # -- Style configuration -----------------------------------------------------
 html_theme = "litestar_sphinx_theme"
@@ -185,17 +190,14 @@ html_theme_options = {
 
 
 def update_html_context(
-    app: Sphinx,
-    pagename: str,
-    templatename: str,
-    context: dict[str, Any],
-    doctree: document,
+    app: Sphinx, pagename: str, templatename: str, context: dict[str, Any], doctree: document
 ) -> None:
     context["generate_toctree_html"] = partial(context["generate_toctree_html"], startdepth=0)
 
 
 def delayed_setup(app: Sphinx) -> None:
-    """When running linkcheck Shibuya causes a build failure, and checking
+    """
+    When running linkcheck Shibuya causes a build failure, and checking
     the builder in the initial `setup` function call is not possible, so the check
     and extension setup has to be delayed until the builder is initialized.
     """
@@ -203,6 +205,7 @@ def delayed_setup(app: Sphinx) -> None:
         return
 
     app.setup_extension("shibuya")
+    # app.connect("html-page-context", update_html_context)  # TODO(provinkraut): fix
 
 
 def setup(app: Sphinx) -> dict[str, bool]:
