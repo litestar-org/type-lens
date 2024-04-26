@@ -39,7 +39,7 @@ jobs:
 
           ssh-key: ${{ secrets.DOCS_PREVIEW_DEPLOY_KEY }}
 
-          repository-name: jolt-org/type-lens-docs-preview
+          repository-name: litestar-org/type-lens-docs-preview
           clean: false
 
           target-folder: ${{ env.PR_NUMBER }}
@@ -54,7 +54,7 @@ jobs:
         with:
           script: |
             const issue_number = process.env.PR_NUMBER
-            const body = "Documentation preview will be available shortly at https://jolt-org.github.io/type-lens-docs-preview/" + issue_number
+            const body = "Documentation preview will be available shortly at https://litestar-org.github.io/type-lens-docs-preview/" + issue_number
 
             const opts = github.rest.issues.listComments.endpoint.merge({
               owner: context.repo.owner,

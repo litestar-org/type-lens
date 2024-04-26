@@ -1,24 +1,21 @@
 [project]
 authors = [
-    {name = "Cody Fincher", email = "cody.fincher@gmail.com"},
-    {name = "Janek Nouvertné", email = "provinzkraut@posteo.de"},
-    {name = "Jacob Coffee", email = "jacob@z7x.org"},
-    {name = "Peter Schutt", email = "peter.github@proton.me"},
-    {name = "Visakh Unnikrishnan", email = "guacs.guacs@gmail.com"},
+    { name = "Peter Schutt", email = "peter.github@proton.me" },
 ]
 maintainers = [
-    {name = "Jolt Developers", email = "maintainers@jolt.rs"},
-    {name = "Cody Fincher", email = "cody.fincher@gmail.com"},
-    {name = "Janek Nouvertné", email = "provinzkraut@posteo.de"},
-    {name = "Jacob Coffee", email = "jacob@z7x.org"},
-    {name = "Peter Schutt", email = "peter.github@proton.me"},
-    {name = "Visakh Unnikrishnan", email = "guacs.guacs@gmail.com"},
+    { name = "Litestar Developers", email = "hello@litestar.dev" },
+    { name = "Cody Fincher", email = "cody@litestar.dev" },
+    { name = "Jacob Coffee", email = "jacob@litestar.dev" },
+    { name = "Janek Nouvertné", email = "provinzkraut@litestar.dev" },
+    { name = "Peter Schutt", email = "peter@litestar.dev" },
+    { name = "Visakh Unnikrishnan", email = "guacs@litestar.dev" },
+    { name = "Alc", email = "alc@litestar.dev" }
 ]
 keywords = [
     "programming",
     "developer",
     "tools",
-    "jolt-org",
+    "litestar-org",
     "type-lens",
 ]
 classifiers = [
@@ -41,24 +38,23 @@ name = "type-lens"
 version = "0.1.0a1"
 description = "type-lens is a Python template project designed to simplify the setup of a new project."
 readme = "README.md"
-license = {text = "MIT"}
+license = { text = "MIT" }
 requires-python = ">=3.9,<4.0"
 dependencies = [
 ]
 
 [project.urls]
-"Issue Tracker" = "https://github.com/jolt-org/type-lens/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc"
-Changelog = "https://github.com/jolt-org/type-lens/releases/"
-Discord = "https://discord.gg/XpFNTjjtTK"
-Blog = "https://blog.jolt.rs"
-homepage = "https://jolt.rs/"
-repository = "https://github.com/jolt-org/type-lens"
-documentation = "https://docs.type-lens.jolt.rs/"
+"Issue Tracker" = "https://github.com/litestar-org/type-lens/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc"
+Changelog = "https://github.com/litestar-org/type-lens/releases/"
+Discord = "https://discord.gg/litestar"
+Blog = "https://blog.litestar.dev"
+homepage = "https://litestar.dev/"
+repository = "https://github.com/litestar-org/type-lens"
+documentation = "https://docs.type-lens.litestar.dev/"
 
 [tool.pdm.dev-dependencies]
 docs = [
     "auto-pytabs[sphinx]>=0.4.0",
-    "shibuya==2023.10.26",
     "sphinx-autobuild>=2021.3.14",
     "sphinx-click>=4.4.0",
     "sphinx-copybutton>=0.5.2",
@@ -66,6 +62,10 @@ docs = [
     "sphinx-toolbox>=3.5.0",
     "sphinx>=7.1.2",
     "sphinxcontrib-mermaid>=0.9.2",
+    "sphinx-paramlinks>=0.6.0",
+    "sphinx-togglebutton>=0.3.2",
+    #    "litestar-sphinx-theme @ {root:uri}/../litestar-sphinx-theme", # only needed when working on the theme
+    "litestar-sphinx-theme @ git+https://github.com/litestar-org/litestar-sphinx-theme.git@v3",
 ]
 lint = [
     "codecov-cli",
@@ -81,7 +81,7 @@ test = [
 ]
 
 [tool.pdm.scripts]
-ci = {composite = ["lint", "test"]}
+ci = { composite = ["lint", "test"] }
 docs-serve = "sphinx-autobuild docs docs/_build/ -j auto --watch dtos --watch docs --watch tests --port 8002"
 lint = "pre-commit run --all-files"
 test = "pytest"
