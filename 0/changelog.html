@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Contribution guide - Litestar Framework</title>
-    <link rel="shortcut icon" href="_static/favicon.svg"/><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Changelog" href="changelog.html" />
+      <title>Changelog - Litestar Framework</title>
+    <link rel="shortcut icon" href="_static/favicon.svg"/><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="Contribution guide" href="contribution-guide.html" /><link rel="prev" title="API Reference" href="reference/index.html" />
 
   <script>
     function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
@@ -28,7 +28,7 @@
   --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
 }
 </style>
-    <meta property="og:type" content="website"/><meta property="og:title" content="Contribution guide"/>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Changelog"/>
 <meta name="twitter:card" content="summary"/>
 <meta property="og:image" content="_static/logo-light.svg"/>
   </head>
@@ -49,7 +49,7 @@
             <i class="i-lucid chevron"></i>
           </button>
         <ul>
-          <li><a href="#">
+          <li><a href="contribution-guide.html">
                 <span>Contributing</span>
                 <small>Learn how to contribute to the Type Lens project</small>
               </a></li><li><a href="https://github.com/litestar-org/.github?tab=coc-ov-file">
@@ -78,7 +78,7 @@
             <i class="i-lucid chevron"></i>
           </button>
         <ul>
-          <li><a href="changelog.html">
+          <li><a href="#">
                 <span>1.x Changelog</span>
                 <small>All changes in the 1.x series</small>
               </a></li></ul>
@@ -180,8 +180,8 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Contribution guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution-guide.html">Contribution guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/search?q=user%3Alitestar-org+state%3Aopen+label%3A%22good+first+issue%22+++no%3Aassignee+repo%3A%22type-lens%22&amp;type=issues">Available Issues</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/litestar-org/.github?tab=coc-ov-file#readme">Code of Conduct</a></li>
 </ul>
@@ -200,20 +200,13 @@
   <div class="localtoc">
     <h3>On this page</h3>
     <ul>
-<li><a class="reference internal" href="#setting-up-the-environment">Setting up the environment</a></li>
-<li><a class="reference internal" href="#code-contributions">Code contributions</a><ul>
-<li><a class="reference internal" href="#workflow">Workflow</a></li>
+<li><a class="reference internal" href="#id1">Release [v0.1.0a1] - 2024-04-26</a><ul>
+<li><a class="reference internal" href="#bug-fixes">Bug Fixes</a></li>
+<li><a class="reference internal" href="#documentation">Documentation</a></li>
+<li><a class="reference internal" href="#refactor">Refactor</a></li>
+<li><a class="reference internal" href="#ci">Ci</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#guidelines-for-writing-code">Guidelines for writing code</a><ul>
-<li><a class="reference internal" href="#writing-and-running-tests">Writing and running tests</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#project-documentation">Project documentation</a><ul>
-<li><a class="reference internal" href="#running-the-docs-locally">Running the docs locally</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#creating-a-new-release">Creating a new release</a></li>
 </ul>
 
   </div><a class="js-repo-stats repo-stats flex items-center" href="https://github.com/litestar-org/type-lens"
@@ -235,7 +228,7 @@
     </span>
   </span>
 </a><div class="edit-this-page">
-  <a href="https://github.com/litestar-org/type-lens/blob/master/docs/contribution-guide.rst">Edit this page</a>
+  <a href="https://github.com/litestar-org/type-lens/blob/master/docs/changelog.rst">Edit this page</a>
 </div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div>
     </div>
   </aside>
@@ -258,7 +251,7 @@
       </li>
       
       <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <strong itemprop="name">Contribution guide</strong>
+        <strong itemprop="name">Changelog</strong>
         <meta itemprop="position" content="2" />
       </li>
       
@@ -275,95 +268,45 @@
     <div class="flex flex-col break-words justify-between">
       <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
         <article class="yue" role="main">
-          <section id="contribution-guide">
-<h1>Contribution guide<a class="headerlink" href="#contribution-guide" title="Link to this heading">¶</a></h1>
-<section id="setting-up-the-environment">
-<h2>Setting up the environment<a class="headerlink" href="#setting-up-the-environment" title="Link to this heading">¶</a></h2>
-<ol class="arabic simple">
-<li><p>Install <a class="reference external" href="https://pdm.fming.dev/latest/">Pizza Delivery Man</a></p></li>
-<li><p>Run <code class="docutils literal notranslate"><span class="pre">pdm</span> <span class="pre">install</span> <span class="pre">-G:all</span></code> to create a <a class="reference external" href="https://docs.python.org/3/tutorial/venv.html">virtual environment</a> and install
-the dependencies</p></li>
-<li><p>If you’re working on the documentation and need to build it locally, install the extra dependencies with <code class="docutils literal notranslate"><span class="pre">pdm</span> <span class="pre">install</span> <span class="pre">-G:docs</span></code></p></li>
-<li><p>Install <a class="reference external" href="https://pre-commit.com/">pre-commit</a></p></li>
-<li><p>Run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">install</span></code> to install pre-commit hooks</p></li>
-</ol>
-</section>
-<section id="code-contributions">
-<h2>Code contributions<a class="headerlink" href="#code-contributions" title="Link to this heading">¶</a></h2>
-<section id="workflow">
-<h3>Workflow<a class="headerlink" href="#workflow" title="Link to this heading">¶</a></h3>
-<ol class="arabic simple">
-<li><p><a class="reference external" href="https://github.com/litestar-org/type-lens/fork">Fork</a> the <a class="reference external" href="https://github.com/litestar-org/type-lens">type-lens repository</a></p></li>
-<li><p>Clone your fork locally with git</p></li>
-<li><p><a class="reference external" href="#setting-up-the-environment">Set up the environment</a></p></li>
-<li><p>Make your changes</p></li>
-<li><p>(Optional) Run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">run</span> <span class="pre">--all-files</span></code> to run linters and formatters. This step is optional and will be executed
-automatically by git before you make a commit, but you may want to run it manually in order to apply fixes</p></li>
-<li><p>Commit your changes to git</p></li>
-<li><p>Push the changes to your fork</p></li>
-<li><p>Open a <a class="reference external" href="https://docs.github.com/en/pull-requests">pull request</a>. Give the pull request a descriptive title
-indicating what it changes. If it has a corresponding open issue, the issue number should be included in the title as
-well. For example a pull request that fixes issue <code class="docutils literal notranslate"><span class="pre">bug:</span> <span class="pre">Increased</span> <span class="pre">stack</span> <span class="pre">size</span> <span class="pre">making</span> <span class="pre">it</span> <span class="pre">impossible</span> <span class="pre">to</span> <span class="pre">find</span> <span class="pre">needle</span> <span class="pre">#100</span></code>
-could be titled <code class="docutils literal notranslate"><span class="pre">fix(#100):</span> <span class="pre">Make</span> <span class="pre">needles</span> <span class="pre">easier</span> <span class="pre">to</span> <span class="pre">find</span> <span class="pre">by</span> <span class="pre">applying</span> <span class="pre">fire</span> <span class="pre">to</span> <span class="pre">haystack</span></code></p></li>
-</ol>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Pull requests and commits all need to follow the
-<a class="reference external" href="https://www.conventionalcommits.org">Conventional Commit format</a></p>
-</div>
-</section>
-</section>
-<section id="guidelines-for-writing-code">
-<h2>Guidelines for writing code<a class="headerlink" href="#guidelines-for-writing-code" title="Link to this heading">¶</a></h2>
+          <section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">¶</a></h1>
+<p>All commits to this project will be documented in this file.</p>
+<section id="id1">
+<h2><a class="reference external" href="https://github.com/litestar-org/type-lens/releases/tag/v0.1.0a1">Release [v0.1.0a1] - 2024-04-26</a><a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
 <ul class="simple">
-<li><p>All code should be fully <a class="reference external" href="https://peps.python.org/pep-0484/">typed</a>. This is enforced via
-<a class="reference external" href="https://mypy.readthedocs.io/en/stable/">mypy</a>.</p></li>
-<li><p>All code should be tested. This is enforced via <a class="reference external" href="https://docs.pytest.org/en/stable/">pytest</a>.</p></li>
-<li><p>All code should be properly formatted. This is enforced via <a class="reference external" href="https://black.readthedocs.io/en/stable/">black</a> and <a class="reference external" href="https://beta.ruff.rs/docs/">Ruff</a>.</p></li>
+<li><p><a class="reference external" href="https://github.com/litestar-org/type-lens/commits/v0.1.0a1">See All commits in v0.1.0a1</a></p></li>
 </ul>
-<section id="writing-and-running-tests">
-<h3>Writing and running tests<a class="headerlink" href="#writing-and-running-tests" title="Link to this heading">¶</a></h3>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p>Write this section</p>
-</div>
-</section>
-</section>
-<section id="project-documentation">
-<h2>Project documentation<a class="headerlink" href="#project-documentation" title="Link to this heading">¶</a></h2>
-<p>The documentation is located in the <code class="docutils literal notranslate"><span class="pre">/docs</span></code> directory and is <a class="reference external" href="https://docutils.sourceforge.io/rst.html">ReST</a> and
-<a class="reference external" href="https://www.sphinx-doc.org/en/master/">Sphinx</a>. If you’re unfamiliar with any of those,
-<a class="reference external" href="https://www.sphinx-doc.org/en/master/lib/usage/restructuredtext/basics.html">ReStructuredText primer</a> and
-<a class="reference external" href="https://www.sphinx-doc.org/en/master/lib/usage/quickstart.html">Sphinx quickstart</a> are recommended reads.</p>
-<section id="running-the-docs-locally">
-<h3>Running the docs locally<a class="headerlink" href="#running-the-docs-locally" title="Link to this heading">¶</a></h3>
-<p>To run or build the docs locally, you need to first install the required dependencies:</p>
-<p><code class="docutils literal notranslate"><span class="pre">pdm</span> <span class="pre">install</span> <span class="pre">-G:docs</span></code></p>
-<p>Then you can serve the documentation with <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">docs-serve</span></code>, or build them with <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">docs</span></code>.</p>
-</section>
-</section>
-<section id="creating-a-new-release">
-<h2>Creating a new release<a class="headerlink" href="#creating-a-new-release" title="Link to this heading">¶</a></h2>
-<ol class="arabic">
-<li><dl>
-<dt>Increment the version in <a class="reference external" href="https://github.com/litestar-org/type-lens/blob/main/pyproject.toml">pyproject.toml</a>.</dt><dd><div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The version should follow <a class="reference external" href="https://semver.org/">semantic versioning</a> and <a class="reference external" href="https://www.python.org/dev/peps/pep-0440/">PEP 440</a>.</p>
-</div>
-</dd>
-</dl>
-</li>
-<li><p><a class="reference external" href="https://github.com/litestar-org/type-lens/releases/new">Draft a new release</a> on GitHub</p>
+<p><a class="reference external" href="https://github.com/litestar-org/type-lens/commit/0e209be1dc0bf99a0163ec4cdc15e36e4d21eb2b">0e209be</a> … <a class="reference external" href="https://github.com/litestar-org/type-lens/commit/567f49ae117ff5d3619f857cbf986d454ef7e9fa">567f49a</a> | <a class="reference external" href="https://github.com/litestar-org/type-lens/compare/0e209be1dc0bf99a0163ec4cdc15e36e4d21eb2b...567f49ae117ff5d3619f857cbf986d454ef7e9fa">See diff for 0.1.0a1</a></p>
+<section id="bug-fixes">
+<h3>Bug Fixes<a class="headerlink" href="#bug-fixes" title="Link to this heading">¶</a></h3>
 <ul class="simple">
-<li><p>Use <code class="docutils literal notranslate"><span class="pre">vMAJOR.MINOR.PATCH</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">v1.2.3</span></code>) as both the tag and release title</p></li>
-<li><p>Fill in the release description. You can use the “Generate release notes” function to get a draft for this</p></li>
+<li><p>(<a class="reference external" href="https://github.com/litestar-org/type-lens/commit/64058981550b0ca41538fe8a706cd782a885dc4d">6405898</a>)  - Add ParameterView to pkg ns (Peter Schutt)</p></li>
 </ul>
-</li>
-<li><p>Commit your changes and push to <code class="docutils literal notranslate"><span class="pre">main</span></code></p></li>
-<li><p>Publish the release</p></li>
-<li><p>Go to <a class="reference external" href="https://github.com/litestar-org/type-lens/actions">Actions</a> and approve the release workflow</p></li>
-<li><p>Check that the workflow runs successfully</p></li>
-</ol>
+</section>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>(<a class="reference external" href="https://github.com/litestar-org/type-lens/commit/3d806380f3e9b6b6d2a02c0bfbca866701f7df8a">3d80638</a>)  - Move to litestar (Jacob Coffee)</p></li>
+<li><p>(<a class="reference external" href="https://github.com/litestar-org/type-lens/commit/bea12110642f52e7df44ab0a088cdc63a618915c">bea1211</a>)  - Fix discord link (Jacob Coffee)</p></li>
+<li><p>(<a class="reference external" href="https://github.com/litestar-org/type-lens/commit/55ef5f6b161ec20c7691e656ea525fc61d71c8a5">55ef5f6</a>)  - Add pages (Jacob Coffee)</p></li>
+<li><p>(<a class="reference external" href="https://github.com/litestar-org/type-lens/commit/14b08987f33a88f56a1a6e4084695cb74c5e2ae8">14b0898</a>)  - Update changelog, add filler content (Jacob Coffee)</p></li>
+<li><p>(<a class="reference external" href="https://github.com/litestar-org/type-lens/commit/567f49ae117ff5d3619f857cbf986d454ef7e9fa">567f49a</a>)  - Fix version (Jacob Coffee)</p></li>
+</ul>
+</section>
+<section id="refactor">
+<h3>Refactor<a class="headerlink" href="#refactor" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>(<a class="reference external" href="https://github.com/litestar-org/type-lens/commit/105043af379af5c8f8670f276767e9c0ac830b1c">105043a</a>)  - Better Empty type (Peter Schutt)</p></li>
+<li><p>(<a class="reference external" href="https://github.com/litestar-org/type-lens/commit/2076afe75f4a1a0c23d50e245a27bdd388cfaa1e">2076afe</a>)  - Use plain old python classes (Peter Schutt)</p></li>
+</ul>
+</section>
+<section id="ci">
+<h3>Ci<a class="headerlink" href="#ci" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p>(<a class="reference external" href="https://github.com/litestar-org/type-lens/commit/0da8b245d3bea78b3caad01a1c319f79bbb13f36">0da8b24</a>)  - Apply pre-commit (Jacob Coffee)</p></li>
+</ul>
+<p>Type Lens Changelog</p>
+</section>
 </section>
 </section>
 
@@ -377,17 +320,25 @@ could be titled <code class="docutils literal notranslate"><span class="pre">fix
         
         <div class="navigation flex print:hidden">
   <div class="navigation-prev">
-    <a href="changelog.html">
+    <a href="reference/index.html">
       <i class="i-lucid chevron"></i>
       <div class="page-info">
         <span>Previous</span>
         
-        <div class="title">Changelog</div>
+        <div class="title">API Reference</div>
         
       </div>
     </a>
   </div>
-  
+  <div class="navigation-next">
+    <a href="contribution-guide.html">
+      <div class="page-info">
+        <span>Next</span>
+        <div class="title">Contribution guide</div>
+      </div>
+      <i class="i-lucid chevron"></i>
+    </a>
+  </div>
 </div>
         
       </div>

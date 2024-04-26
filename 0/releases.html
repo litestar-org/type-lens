@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Contribution guide - Litestar Framework</title>
-    <link rel="shortcut icon" href="_static/favicon.svg"/><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="prev" title="Changelog" href="changelog.html" />
+      <title>Type Lens Releases - Litestar Framework</title>
+    <link rel="shortcut icon" href="_static/favicon.svg"/><link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
 
   <script>
     function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
@@ -28,7 +28,7 @@
   --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
 }
 </style>
-    <meta property="og:type" content="website"/><meta property="og:title" content="Contribution guide"/>
+    <meta property="og:type" content="website"/><meta property="og:title" content="Type Lens Releases"/>
 <meta name="twitter:card" content="summary"/>
 <meta property="og:image" content="_static/logo-light.svg"/>
   </head>
@@ -49,7 +49,7 @@
             <i class="i-lucid chevron"></i>
           </button>
         <ul>
-          <li><a href="#">
+          <li><a href="contribution-guide.html">
                 <span>Contributing</span>
                 <small>Learn how to contribute to the Type Lens project</small>
               </a></li><li><a href="https://github.com/litestar-org/.github?tab=coc-ov-file">
@@ -68,7 +68,7 @@
           <li><a href="https://litestar.dev/about/organization">
                 <span>Litestar Organization</span>
                 <small>Details about the Litestar organization</small>
-              </a></li><li><a href="releases.html">
+              </a></li><li><a href="#">
                 <span>Releases</span>
                 <small>Explore the release process, versioning, and deprecation policy for Litestar</small>
               </a></li></ul>
@@ -179,9 +179,9 @@
 </li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Development</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Contribution guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribution-guide.html">Contribution guide</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/search?q=user%3Alitestar-org+state%3Aopen+label%3A%22good+first+issue%22+++no%3Aassignee+repo%3A%22type-lens%22&amp;type=issues">Available Issues</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/litestar-org/.github?tab=coc-ov-file#readme">Code of Conduct</a></li>
 </ul>
@@ -200,20 +200,14 @@
   <div class="localtoc">
     <h3>On this page</h3>
     <ul>
-<li><a class="reference internal" href="#setting-up-the-environment">Setting up the environment</a></li>
-<li><a class="reference internal" href="#code-contributions">Code contributions</a><ul>
-<li><a class="reference internal" href="#workflow">Workflow</a></li>
+<li><a class="reference internal" href="#version-numbering">Version Numbering</a><ul>
+<li><a class="reference internal" href="#pre-release-versions">Pre-release Versions</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#guidelines-for-writing-code">Guidelines for writing code</a><ul>
-<li><a class="reference internal" href="#writing-and-running-tests">Writing and running tests</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#project-documentation">Project documentation</a><ul>
-<li><a class="reference internal" href="#running-the-docs-locally">Running the docs locally</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#creating-a-new-release">Creating a new release</a></li>
+<li><a class="reference internal" href="#long-term-support-releases-lts">Long-term Support Releases (LTS)</a></li>
+<li><a class="reference internal" href="#deprecation-policy">Deprecation Policy</a></li>
+<li><a class="reference internal" href="#id1">Supported Versions</a></li>
+<li><a class="reference internal" href="#release-process">Release Process</a></li>
 </ul>
 
   </div><a class="js-repo-stats repo-stats flex items-center" href="https://github.com/litestar-org/type-lens"
@@ -235,7 +229,7 @@
     </span>
   </span>
 </a><div class="edit-this-page">
-  <a href="https://github.com/litestar-org/type-lens/blob/master/docs/contribution-guide.rst">Edit this page</a>
+  <a href="https://github.com/litestar-org/type-lens/blob/master/docs/releases.rst">Edit this page</a>
 </div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div>
     </div>
   </aside>
@@ -258,7 +252,7 @@
       </li>
       
       <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-        <strong itemprop="name">Contribution guide</strong>
+        <strong itemprop="name">Type Lens Releases</strong>
         <meta itemprop="position" content="2" />
       </li>
       
@@ -275,94 +269,79 @@
     <div class="flex flex-col break-words justify-between">
       <div class="min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
         <article class="yue" role="main">
-          <section id="contribution-guide">
-<h1>Contribution guide<a class="headerlink" href="#contribution-guide" title="Link to this heading">¶</a></h1>
-<section id="setting-up-the-environment">
-<h2>Setting up the environment<a class="headerlink" href="#setting-up-the-environment" title="Link to this heading">¶</a></h2>
-<ol class="arabic simple">
-<li><p>Install <a class="reference external" href="https://pdm.fming.dev/latest/">Pizza Delivery Man</a></p></li>
-<li><p>Run <code class="docutils literal notranslate"><span class="pre">pdm</span> <span class="pre">install</span> <span class="pre">-G:all</span></code> to create a <a class="reference external" href="https://docs.python.org/3/tutorial/venv.html">virtual environment</a> and install
-the dependencies</p></li>
-<li><p>If you’re working on the documentation and need to build it locally, install the extra dependencies with <code class="docutils literal notranslate"><span class="pre">pdm</span> <span class="pre">install</span> <span class="pre">-G:docs</span></code></p></li>
-<li><p>Install <a class="reference external" href="https://pre-commit.com/">pre-commit</a></p></li>
-<li><p>Run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">install</span></code> to install pre-commit hooks</p></li>
-</ol>
-</section>
-<section id="code-contributions">
-<h2>Code contributions<a class="headerlink" href="#code-contributions" title="Link to this heading">¶</a></h2>
-<section id="workflow">
-<h3>Workflow<a class="headerlink" href="#workflow" title="Link to this heading">¶</a></h3>
-<ol class="arabic simple">
-<li><p><a class="reference external" href="https://github.com/litestar-org/type-lens/fork">Fork</a> the <a class="reference external" href="https://github.com/litestar-org/type-lens">type-lens repository</a></p></li>
-<li><p>Clone your fork locally with git</p></li>
-<li><p><a class="reference external" href="#setting-up-the-environment">Set up the environment</a></p></li>
-<li><p>Make your changes</p></li>
-<li><p>(Optional) Run <code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">run</span> <span class="pre">--all-files</span></code> to run linters and formatters. This step is optional and will be executed
-automatically by git before you make a commit, but you may want to run it manually in order to apply fixes</p></li>
-<li><p>Commit your changes to git</p></li>
-<li><p>Push the changes to your fork</p></li>
-<li><p>Open a <a class="reference external" href="https://docs.github.com/en/pull-requests">pull request</a>. Give the pull request a descriptive title
-indicating what it changes. If it has a corresponding open issue, the issue number should be included in the title as
-well. For example a pull request that fixes issue <code class="docutils literal notranslate"><span class="pre">bug:</span> <span class="pre">Increased</span> <span class="pre">stack</span> <span class="pre">size</span> <span class="pre">making</span> <span class="pre">it</span> <span class="pre">impossible</span> <span class="pre">to</span> <span class="pre">find</span> <span class="pre">needle</span> <span class="pre">#100</span></code>
-could be titled <code class="docutils literal notranslate"><span class="pre">fix(#100):</span> <span class="pre">Make</span> <span class="pre">needles</span> <span class="pre">easier</span> <span class="pre">to</span> <span class="pre">find</span> <span class="pre">by</span> <span class="pre">applying</span> <span class="pre">fire</span> <span class="pre">to</span> <span class="pre">haystack</span></code></p></li>
-</ol>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Pull requests and commits all need to follow the
-<a class="reference external" href="https://www.conventionalcommits.org">Conventional Commit format</a></p>
-</div>
-</section>
-</section>
-<section id="guidelines-for-writing-code">
-<h2>Guidelines for writing code<a class="headerlink" href="#guidelines-for-writing-code" title="Link to this heading">¶</a></h2>
+          <section id="type-lens-releases">
+<h1>Type Lens Releases<a class="headerlink" href="#type-lens-releases" title="Link to this heading">¶</a></h1>
+<section id="version-numbering">
+<h2>Version Numbering<a class="headerlink" href="#version-numbering" title="Link to this heading">¶</a></h2>
+<p>This library follows the <a class="reference external" href="https://semver.org/">Semantic Versioning standard</a>, using the <code class="docutils literal notranslate"><span class="pre">&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</span></code>
+schema:</p>
+<dl class="simple">
+<dt><strong>Major</strong></dt><dd><p>Backwards incompatible changes have been made</p>
+</dd>
+<dt><strong>Minor</strong></dt><dd><p>Functionality was added in a backwards compatible manner</p>
+</dd>
+<dt><strong>Patch</strong></dt><dd><p>Bugfixes were applied in a backwards compatible manner</p>
+</dd>
+</dl>
+<section id="pre-release-versions">
+<h3>Pre-release Versions<a class="headerlink" href="#pre-release-versions" title="Link to this heading">¶</a></h3>
+<p>Before a new major release, we will make <code class="docutils literal notranslate"><span class="pre">alpha</span></code>, <code class="docutils literal notranslate"><span class="pre">beta</span></code>, and release candidate (<code class="docutils literal notranslate"><span class="pre">rc</span></code>) releases, numbered as
+<code class="docutils literal notranslate"><span class="pre">&lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;&lt;release_type&gt;&lt;number&gt;</span></code>. For example, <code class="docutils literal notranslate"><span class="pre">2.0.0alpha1</span></code>, <code class="docutils literal notranslate"><span class="pre">2.0.0beta1</span></code>, <code class="docutils literal notranslate"><span class="pre">2.0.0rc1</span></code>.</p>
 <ul class="simple">
-<li><p>All code should be fully <a class="reference external" href="https://peps.python.org/pep-0484/">typed</a>. This is enforced via
-<a class="reference external" href="https://mypy.readthedocs.io/en/stable/">mypy</a>.</p></li>
-<li><p>All code should be tested. This is enforced via <a class="reference external" href="https://docs.pytest.org/en/stable/">pytest</a>.</p></li>
-<li><p>All code should be properly formatted. This is enforced via <a class="reference external" href="https://black.readthedocs.io/en/stable/">black</a> and <a class="reference external" href="https://beta.ruff.rs/docs/">Ruff</a>.</p></li>
-</ul>
-<section id="writing-and-running-tests">
-<h3>Writing and running tests<a class="headerlink" href="#writing-and-running-tests" title="Link to this heading">¶</a></h3>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p>Write this section</p>
-</div>
-</section>
-</section>
-<section id="project-documentation">
-<h2>Project documentation<a class="headerlink" href="#project-documentation" title="Link to this heading">¶</a></h2>
-<p>The documentation is located in the <code class="docutils literal notranslate"><span class="pre">/docs</span></code> directory and is <a class="reference external" href="https://docutils.sourceforge.io/rst.html">ReST</a> and
-<a class="reference external" href="https://www.sphinx-doc.org/en/master/">Sphinx</a>. If you’re unfamiliar with any of those,
-<a class="reference external" href="https://www.sphinx-doc.org/en/master/lib/usage/restructuredtext/basics.html">ReStructuredText primer</a> and
-<a class="reference external" href="https://www.sphinx-doc.org/en/master/lib/usage/quickstart.html">Sphinx quickstart</a> are recommended reads.</p>
-<section id="running-the-docs-locally">
-<h3>Running the docs locally<a class="headerlink" href="#running-the-docs-locally" title="Link to this heading">¶</a></h3>
-<p>To run or build the docs locally, you need to first install the required dependencies:</p>
-<p><code class="docutils literal notranslate"><span class="pre">pdm</span> <span class="pre">install</span> <span class="pre">-G:docs</span></code></p>
-<p>Then you can serve the documentation with <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">docs-serve</span></code>, or build them with <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">docs</span></code>.</p>
-</section>
-</section>
-<section id="creating-a-new-release">
-<h2>Creating a new release<a class="headerlink" href="#creating-a-new-release" title="Link to this heading">¶</a></h2>
-<ol class="arabic">
-<li><dl>
-<dt>Increment the version in <a class="reference external" href="https://github.com/litestar-org/type-lens/blob/main/pyproject.toml">pyproject.toml</a>.</dt><dd><div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The version should follow <a class="reference external" href="https://semver.org/">semantic versioning</a> and <a class="reference external" href="https://www.python.org/dev/peps/pep-0440/">PEP 440</a>.</p>
-</div>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">alpha</span></code></dt><dd><p>Early developer preview. Features may not be complete and breaking changes can occur.</p>
 </dd>
 </dl>
 </li>
-<li><p><a class="reference external" href="https://github.com/litestar-org/type-lens/releases/new">Draft a new release</a> on GitHub</p>
-<ul class="simple">
-<li><p>Use <code class="docutils literal notranslate"><span class="pre">vMAJOR.MINOR.PATCH</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">v1.2.3</span></code>) as both the tag and release title</p></li>
-<li><p>Fill in the release description. You can use the “Generate release notes” function to get a draft for this</p></li>
-</ul>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">beta</span></code></dt><dd><p>More stable preview release. Feature complete, no major breaking changes expected.</p>
+</dd>
+</dl>
 </li>
-<li><p>Commit your changes and push to <code class="docutils literal notranslate"><span class="pre">main</span></code></p></li>
-<li><p>Publish the release</p></li>
-<li><p>Go to <a class="reference external" href="https://github.com/litestar-org/type-lens/actions">Actions</a> and approve the release workflow</p></li>
-<li><p>Check that the workflow runs successfully</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">rc</span></code></dt><dd><p>Release candidate. Feature freeze, only bugfixes until final release.
+Suitable for testing migration to the upcoming major release.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+<section id="long-term-support-releases-lts">
+<h2>Long-term Support Releases (LTS)<a class="headerlink" href="#long-term-support-releases-lts" title="Link to this heading">¶</a></h2>
+<p>Major releases are designated as LTS releases for the life of that major release series.
+These releases will receive bugfixes for a guaranteed period of time as defined in
+<a class="reference external" href="#supported-versions">Supported Versions</a>.</p>
+</section>
+<section id="deprecation-policy">
+<h2>Deprecation Policy<a class="headerlink" href="#deprecation-policy" title="Link to this heading">¶</a></h2>
+<p>When a feature is going to be removed, a deprecation warning will be added in a <strong>minor</strong> release.
+The feature will continue to work for all releases in that major series, and will be removed in the next major release.</p>
+<p>For example, if a deprecation warning is added in <code class="docutils literal notranslate"><span class="pre">1.1</span></code>, the feature will work throughout all <code class="docutils literal notranslate"><span class="pre">1.x</span></code> releases,
+and be removed in <code class="docutils literal notranslate"><span class="pre">2.0</span></code>.</p>
+</section>
+<section id="id1">
+<h2>Supported Versions<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h2>
+<p>At any time, the Litestar organization will actively support:</p>
+<ul class="simple">
+<li><p>The current major release series</p></li>
+<li><p>The previous major release series</p></li>
+<li><p>Any other designated LTS releases (Special cases)</p></li>
+</ul>
+<p>For example, if the current release is <code class="docutils literal notranslate"><span class="pre">2.0</span></code>, we will actively support <code class="docutils literal notranslate"><span class="pre">2.x</span></code> and <code class="docutils literal notranslate"><span class="pre">1.x</span></code>.
+When <code class="docutils literal notranslate"><span class="pre">3.0</span></code> is released, we will drop support for <code class="docutils literal notranslate"><span class="pre">1.x</span></code>.</p>
+<p>Bugfixes will be applied to the current major release, and selectively backported to older
+supported versions based on severity and feasibility.</p>
+</section>
+<section id="release-process">
+<h2>Release Process<a class="headerlink" href="#release-process" title="Link to this heading">¶</a></h2>
+<p>Each major release cycle consists of a few phases:</p>
+<ol class="arabic simple">
+<li><p><strong>Planning</strong>: Define roadmap, spec out major features. Work should begin on implementation.</p></li>
+<li><p><strong>Development</strong>: Active development on planned features. Ends with an alpha release and branch of <code class="docutils literal notranslate"><span class="pre">A.B.x</span></code>
+branch from <cite>main</cite>.</p></li>
+<li><p><strong>Bugfixes</strong>: Only bugfixes, no new features. Progressively release beta, release candidates.
+Feature freeze at RC. Become more selective with backports to avoid regressions.</p></li>
 </ol>
 </section>
 </section>
@@ -376,17 +355,7 @@ could be titled <code class="docutils literal notranslate"><span class="pre">fix
 </button>
         
         <div class="navigation flex print:hidden">
-  <div class="navigation-prev">
-    <a href="changelog.html">
-      <i class="i-lucid chevron"></i>
-      <div class="page-info">
-        <span>Previous</span>
-        
-        <div class="title">Changelog</div>
-        
-      </div>
-    </a>
-  </div>
+  
   
 </div>
         
