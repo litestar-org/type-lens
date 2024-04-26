@@ -6,6 +6,13 @@ from typing import TYPE_CHECKING, Any
 
 from type_lens.__metadata__ import __project__, __version__
 
+__all__ = (
+    "delayed_setup",
+    "setup",
+    "update_html_context",
+)
+
+
 if TYPE_CHECKING:
     from sphinx.addnodes import document
     from sphinx.application import Sphinx
@@ -178,11 +185,11 @@ html_theme_options = {
 
 
 def update_html_context(
-        app: Sphinx,
-        pagename: str,
-        templatename: str,
-        context: dict[str, Any],
-        doctree: document,
+    app: Sphinx,
+    pagename: str,
+    templatename: str,
+    context: dict[str, Any],
+    doctree: document,
 ) -> None:
     context["generate_toctree_html"] = partial(context["generate_toctree_html"], startdepth=0)
 
