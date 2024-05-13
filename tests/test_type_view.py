@@ -15,6 +15,7 @@ from typing import (
 
 import pytest
 from type_lens import TypeView
+from type_lens.types.builtins import NoneType
 from typing_extensions import NotRequired, Required
 
 if TYPE_CHECKING:
@@ -250,6 +251,8 @@ def test_parsed_type_is_optional_predicate() -> None:
     assert TypeView(Union[int, None]).is_optional is True
     assert TypeView(Union[int, None, str]).is_optional is True
     assert TypeView(Union[int, str]).is_optional is False
+    assert TypeView(NoneType).is_optional is True
+    assert TypeView(None).is_optional is True
 
 
 def test_parsed_type_is_subclass_of() -> None:

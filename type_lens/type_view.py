@@ -93,7 +93,7 @@ class TypeView:
     @property
     def is_optional(self) -> bool:
         """Whether the annotation is Optional or not."""
-        return bool(self.is_union and NoneType in self.args)
+        return bool(self.is_union and NoneType in self.args) or self.annotation in {None, NoneType}
 
     @property
     def is_collection(self) -> bool:
