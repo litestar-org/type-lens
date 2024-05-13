@@ -224,6 +224,18 @@ class TypeView(Generic[T]):
             return issubclass(str, typ) or issubclass(bytes, typ)
         return self.annotation is not Any and not self.is_type_var and issubclass(self.annotation, typ)
 
+    def is_subclass_of(self, typ: Any | tuple[Any, ...], /) -> bool:
+        """Whether the annotation is a subclass of the given type.
+
+        Args:
+            typ: The type to check, or tuple of types. Passed as 2nd argument to ``issubclass()``.
+
+        Returns:
+            Whether the annotation is a subclass of the given type(s).
+        """
+        origin = self.origin or self.annotation
+        return isinstance(origin, type) and issubclass(origin, typ)
+
     def strip_optional(self) -> TypeView:
         if not self.is_optional:
             return self
