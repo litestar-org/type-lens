@@ -16,6 +16,7 @@ from typing import (
 
 import pytest
 from type_lens import TypeView
+from type_lens.type_view import NoneType
 from typing_extensions import NotRequired, Required
 
 if TYPE_CHECKING:
@@ -308,3 +309,11 @@ def test_repr():
     assert repr(TypeView(int)) == "TypeView(int)"
     assert repr(TypeView(Optional[str])) == "TypeView(typing.Optional[str])"
     assert repr(TypeView(Literal["1", 2, True])) == "TypeView(typing.Literal['1', 2, True])"
+
+
+def test_is_none_type():
+    assert TypeView(int).is_none_type is False
+    assert TypeView(None).is_none_type is True
+    assert TypeView(NoneType).is_none_type is True
+    assert TypeView(Annotated[None, 4]).is_none_type is True
+    assert TypeView(Union[int, None]).inner_types[1].is_none_type is True
