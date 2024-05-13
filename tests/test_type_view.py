@@ -308,3 +308,9 @@ def test_repr():
     assert repr(TypeView(int)) == "TypeView(int)"
     assert repr(TypeView(Optional[str])) == "TypeView(typing.Optional[str])"
     assert repr(TypeView(Literal["1", 2, True])) == "TypeView(typing.Literal['1', 2, True])"
+
+
+def test_literal():
+    assert TypeView(int).is_literal is False
+    assert TypeView(Literal[4]).is_literal is True
+    assert TypeView(4).is_literal is False
