@@ -81,6 +81,15 @@ class TypeView:
         return self.is_subclass_of(tuple)
 
     @property
+    def is_variadic_tuple(self) -> bool:
+        """Whether the annotation is a ``tuple`` **and** is of unbounded length.
+
+        Tuples like `tuple[int, ...]` represent a list-like unbounded sequence
+        of a single type T.
+        """
+        return self.is_tuple and len(self.args) == 2 and self.args[1] == ...
+
+    @property
     def is_type_var(self) -> bool:
         """Whether the annotation is a TypeVar or not."""
         return isinstance(self.annotation, TypeVar)

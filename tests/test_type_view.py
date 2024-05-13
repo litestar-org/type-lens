@@ -278,3 +278,17 @@ def test_parsed_type_equality() -> None:
     assert TypeView(list[int]) != TypeView(list[str])
     assert TypeView(list[str]) != TypeView(tuple[str])
     assert TypeView(Optional[str]) == TypeView(Union[str, None])
+
+
+def test_tuple():
+    assert TypeView(list[int]).is_tuple is False
+    assert TypeView(list[int]).is_variadic_tuple is False
+
+    assert TypeView(tuple[int]).is_tuple is True
+    assert TypeView(tuple[int]).is_variadic_tuple is False
+
+    assert TypeView(tuple[int, int]).is_tuple is True
+    assert TypeView(tuple[int, int]).is_variadic_tuple is False
+
+    assert TypeView(tuple[int, ...]).is_tuple is True
+    assert TypeView(tuple[int, ...]).is_variadic_tuple is True
