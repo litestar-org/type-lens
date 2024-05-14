@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections import abc
 from collections.abc import Collection, Mapping
-from typing import Annotated, Any, AnyStr, Final, ForwardRef, TypeVar, Union
+from typing import Annotated, Any, AnyStr, Final, ForwardRef, Generic, TypeVar, Union
 
 from typing_extensions import NotRequired, Required, get_args, get_origin
 
@@ -12,7 +12,10 @@ from type_lens.utils import get_instantiable_origin, unwrap_annotation
 __all__ = ("TypeView",)
 
 
-class TypeView:
+T = TypeVar("T")
+
+
+class TypeView(Generic[T]):
     """Represents a type annotation."""
 
     __slots__ = {
@@ -29,7 +32,7 @@ class TypeView:
         "raw": "The annotation exactly as received.",
     }
 
-    def __init__(self, annotation: Any) -> None:
+    def __init__(self, annotation: T) -> None:
         """Initialize ParsedType.
 
         Args:
@@ -45,7 +48,7 @@ class TypeView:
 
         args = () if origin is abc.Callable else get_args(unwrapped)
 
-        self.raw: Final = annotation
+        self.raw: Final[T] = annotation
         self.annotation: Final = unwrapped
         self.origin: Final = origin
         self.args: Final = args
