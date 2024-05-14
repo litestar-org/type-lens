@@ -154,6 +154,6 @@ class TypeView:
         if len(self.args) == 2:
             return self.inner_types[0]
 
-        args = tuple([a for a in self.args if a is not NoneType])
+        args = tuple(a for a in self.args if a is not NoneType)
         non_optional = Union[args]
         return TypeView(non_optional)
