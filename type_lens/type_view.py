@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections import abc
 from collections.abc import Collection, Mapping
-from typing import Annotated, Any, AnyStr, Final, ForwardRef, Generic, TypeVar
+from typing import Annotated, Any, AnyStr, Final, ForwardRef, Generic, TypeVar, Union
 
 from typing_extensions import NotRequired, Required, get_args, get_origin
 
@@ -67,6 +67,14 @@ class TypeView(Generic[T]):
             return bool(self.origin == other.origin and self.inner_types == other.inner_types)
 
         return bool(self.annotation == other.annotation)
+
+    def __repr__(self) -> str:
+        cls_name = self.__class__.__name__
+
+        raw = self.raw
+        if isinstance(self.raw, type):
+            raw = raw.__name__
+        return f"{cls_name}({raw})"
 
     @property
     def is_forward_ref(self) -> bool:
@@ -149,3 +157,14 @@ class TypeView(Generic[T]):
             Whether any of the type's generic args are a subclass of the given type.
         """
         return any(t.is_subclass_of(cl) for t in self.inner_types)
+
+    def strip_optional(self) -> TypeView:
+        if not self.is_optional:
+            return self
+
+        if len(self.args) == 2:
+            return self.inner_types[0]
+
+        args = tuple(a for a in self.args if a is not NoneType)
+        non_optional = Union[args]
+        return TypeView(non_optional)
