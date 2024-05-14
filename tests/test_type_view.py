@@ -295,6 +295,15 @@ def test_tuple():
     assert TypeView(tuple[int, ...]).is_variadic_tuple is True
 
 
+def test_strip_optional() -> None:
+    # Non-optionals should return the original input
+    assert TypeView(int).strip_optional() == TypeView(int)
+
+    assert TypeView(Optional[int]).strip_optional() == TypeView(int)
+    assert TypeView(Optional[Union[str, int]]).strip_optional() == TypeView(Union[str, int])
+    assert TypeView(Union[str, int, None]).strip_optional() == TypeView(Union[str, int])
+
+
 def test_repr():
     assert repr(TypeView(int)) == "TypeView(int)"
     assert repr(TypeView(Optional[str])) == "TypeView(typing.Optional[str])"
