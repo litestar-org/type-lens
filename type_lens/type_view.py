@@ -65,6 +65,14 @@ class TypeView:
 
         return bool(self.annotation == other.annotation)
 
+    def __repr__(self) -> str:
+        cls_name = self.__class__.__name__
+
+        raw = self.raw
+        if isinstance(self.raw, type):
+            raw = raw.__name__
+        return f"{cls_name}({raw})"
+
     @property
     def is_forward_ref(self) -> bool:
         """Whether the annotation is a forward reference or not."""

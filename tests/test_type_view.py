@@ -6,6 +6,7 @@ from typing import (
     Annotated,
     Any,
     ForwardRef,
+    Literal,
     Optional,
     TypedDict,
     TypeVar,
@@ -301,3 +302,9 @@ def test_strip_optional() -> None:
     assert TypeView(Optional[int]).strip_optional() == TypeView(int)
     assert TypeView(Optional[Union[str, int]]).strip_optional() == TypeView(Union[str, int])
     assert TypeView(Union[str, int, None]).strip_optional() == TypeView(Union[str, int])
+
+
+def test_repr():
+    assert repr(TypeView(int)) == "TypeView(int)"
+    assert repr(TypeView(Optional[str])) == "TypeView(typing.Optional[str])"
+    assert repr(TypeView(Literal["1", 2, True])) == "TypeView(typing.Literal['1', 2, True])"
