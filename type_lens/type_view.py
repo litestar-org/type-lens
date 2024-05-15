@@ -121,6 +121,11 @@ class TypeView(Generic[T]):
         return self.is_subclass_of(Collection)
 
     @property
+    def is_none_type(self) -> bool:
+        """Whether the annotation is NoneType or not."""
+        return self.annotation in {None, NoneType}
+
+    @property
     def is_literal(self) -> bool:
         """Whether the annotation is a literal value or not."""
         return self.origin is Literal
