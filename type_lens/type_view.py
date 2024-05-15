@@ -125,7 +125,6 @@ class TypeView(Generic[T]):
         """Whether the annotation is NoneType or not."""
         return self.annotation in {None, NoneType}
 
-
     def is_literal(self) -> bool:
         """Whether the annotation is a literal value or not."""
         return self.origin is Literal
