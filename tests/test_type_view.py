@@ -317,3 +317,9 @@ def test_is_none_type():
     assert TypeView(NoneType).is_none_type is True
     assert TypeView(Annotated[None, 4]).is_none_type is True
     assert TypeView(Union[int, None]).inner_types[1].is_none_type is True
+
+
+def test_literal():
+    assert TypeView(int).is_literal is False
+    assert TypeView(Literal[4]).is_literal is True
+    assert TypeView(4).is_literal is False

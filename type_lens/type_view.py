@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections import abc
 from collections.abc import Collection, Mapping
-from typing import Annotated, Any, AnyStr, Final, ForwardRef, Generic, TypeVar, Union
+from typing import Annotated, Any, AnyStr, Final, ForwardRef, Generic, Literal, TypeVar, Union
 
 from typing_extensions import NotRequired, Required, get_args, get_origin
 
@@ -124,6 +124,11 @@ class TypeView(Generic[T]):
     def is_none_type(self) -> bool:
         """Whether the annotation is NoneType or not."""
         return self.annotation in {None, NoneType}
+
+
+    def is_literal(self) -> bool:
+        """Whether the annotation is a literal value or not."""
+        return self.origin is Literal
 
     @property
     def is_non_string_collection(self) -> bool:
