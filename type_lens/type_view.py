@@ -77,6 +77,11 @@ class TypeView(Generic[T]):
         return f"{cls_name}({raw})"
 
     @property
+    def allows_none(self) -> bool:
+        """Whether the annotation supports being assigned ``None``."""
+        return self.is_optional or self.is_none_type
+
+    @property
     def is_forward_ref(self) -> bool:
         """Whether the annotation is a forward reference or not."""
         return isinstance(self.annotation, (str, ForwardRef))
