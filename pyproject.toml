@@ -73,6 +73,7 @@ lint = [
     "pre-commit",
     "pyright",
     "ruff",
+    "slotscheck",
 ]
 test = [
     "covdefaults",
@@ -210,7 +211,7 @@ classmethod-decorators = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["dtos", "tests", "examples"]
+known-first-party = ["type_lens", "tests"]
 
 [tool.ruff.lint.per-file-ignores]
 "docs/**/*.*" = ["S", "B", "DTZ", "A", "TCH", "ERA", "D", "RET"]

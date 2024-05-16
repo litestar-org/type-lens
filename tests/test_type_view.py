@@ -15,9 +15,10 @@ from typing import (
 )
 
 import pytest
-from type_lens import TypeView
-from type_lens.type_view import NoneType
 from typing_extensions import NotRequired, Required
+
+from type_lens import TypeView
+from type_lens.types.builtins import NoneType
 
 if TYPE_CHECKING:
     from typing import Final
@@ -282,7 +283,7 @@ def test_parsed_type_equality() -> None:
     assert TypeView(Optional[str]) == TypeView(Union[str, None])
 
 
-def test_tuple():
+def test_tuple() -> None:
     assert TypeView(list[int]).is_tuple is False
     assert TypeView(list[int]).is_variadic_tuple is False
 
@@ -305,13 +306,13 @@ def test_strip_optional() -> None:
     assert TypeView(Union[str, int, None]).strip_optional() == TypeView(Union[str, int])
 
 
-def test_repr():
+def test_repr() -> None:
     assert repr(TypeView(int)) == "TypeView(int)"
     assert repr(TypeView(Optional[str])) == "TypeView(typing.Optional[str])"
     assert repr(TypeView(Literal["1", 2, True])) == "TypeView(typing.Literal['1', 2, True])"
 
 
-def test_is_none_type():
+def test_is_none_type() -> None:
     assert TypeView(int).is_none_type is False
     assert TypeView(None).is_none_type is True
     assert TypeView(NoneType).is_none_type is True
@@ -319,13 +320,13 @@ def test_is_none_type():
     assert TypeView(Union[int, None]).inner_types[1].is_none_type is True
 
 
-def test_literal():
+def test_literal() -> None:
     assert TypeView(int).is_literal is False
     assert TypeView(Literal[4]).is_literal is True
     assert TypeView(4).is_literal is False
 
 
-def test_allows_none():
+def test_allows_none() -> None:
     assert TypeView(int).allows_none is False
     assert TypeView(Optional[int]).allows_none is True
     assert TypeView(None).allows_none is True
