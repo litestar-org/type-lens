@@ -323,3 +323,9 @@ def test_literal():
     assert TypeView(int).is_literal is False
     assert TypeView(Literal[4]).is_literal is True
     assert TypeView(4).is_literal is False
+
+
+def test_allows_none():
+    assert TypeView(int).allows_none is False
+    assert TypeView(Optional[int]).allows_none is True
+    assert TypeView(None).allows_none is True
