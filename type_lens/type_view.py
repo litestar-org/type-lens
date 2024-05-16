@@ -73,7 +73,7 @@ class TypeView(Generic[T]):
 
         raw = self.raw
         if isinstance(self.raw, type):
-            raw = raw.__name__
+            raw = raw.__name__  # type: ignore[attr-defined]
         return f"{cls_name}({raw})"
 
     @property
@@ -181,5 +181,5 @@ class TypeView(Generic[T]):
             return self.inner_types[0]
 
         args = tuple(a for a in self.args if a is not NoneType)
-        non_optional = Union[args]
+        non_optional = Union[args]  # type: ignore[valid-type]
         return TypeView(non_optional)
