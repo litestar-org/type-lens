@@ -73,6 +73,7 @@ lint = [
     "pre-commit",
     "pyright",
     "ruff",
+    "slotscheck",
 ]
 test = [
     "covdefaults",
