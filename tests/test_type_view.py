@@ -15,9 +15,10 @@ from typing import (
 )
 
 import pytest
+from typing_extensions import NotRequired, Required
+
 from type_lens import TypeView
 from type_lens.types.builtins import NoneType
-from typing_extensions import NotRequired, Required
 
 if TYPE_CHECKING:
     from typing import Final
