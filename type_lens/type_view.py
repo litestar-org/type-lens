@@ -89,12 +89,12 @@ class TypeView(Generic[T]):
     @property
     def is_mapping(self) -> bool:
         """Whether the annotation is a mapping or not."""
-        return self.is_subclass_of(Mapping)
+        return self.is_subtype_of(Mapping)
 
     @property
     def is_tuple(self) -> bool:
         """Whether the annotation is a ``tuple`` or not."""
-        return self.is_subclass_of(tuple)
+        return self.is_subtype_of(tuple)
 
     @property
     def is_variadic_tuple(self) -> bool:
@@ -123,7 +123,7 @@ class TypeView(Generic[T]):
     @property
     def is_collection(self) -> bool:
         """Whether the annotation is a collection type or not."""
-        return self.is_subclass_of(Collection)
+        return self.is_subtype_of(Collection)
 
     @property
     def is_none_type(self) -> bool:
@@ -138,29 +138,29 @@ class TypeView(Generic[T]):
     @property
     def is_non_string_collection(self) -> bool:
         """Whether the annotation is a non-string collection type or not."""
-        return self.is_collection and not self.is_subclass_of((str, bytes))
+        return self.is_collection and not self.is_subtype_of((str, bytes))
 
-    def is_subclass_of(self, cl: type[Any] | tuple[type[Any], ...]) -> bool:
-        """Whether the annotation is a subclass of the given type.
+    def is_subtype_of(self, typ: Any | tuple[Any, ...], /) -> bool:
+        """Whether the annotation is a subtype of the given type.
 
         Where ``self.annotation`` is a union type, this method will return ``True`` when all members of the union are
         a subtype of ``cl``, otherwise, ``False``.
 
         Args:
-            cl: The type to check, or tuple of types. Passed as 2nd argument to ``issubclass()``.
+            typ: The type to check, or tuple of types. Passed as 2nd argument to ``issubclass()``.
 
         Returns:
             Whether the annotation is a subtype of the given type(s).
         """
         if self.origin:
             if self.origin in UNION_TYPES:
-                return all(t.is_subclass_of(cl) for t in self.inner_types)
+                return all(t.is_subtype_of(typ) for t in self.inner_types)
 
-            return self.origin not in UNION_TYPES and issubclass(self.origin, cl)
+            return self.origin not in UNION_TYPES and issubclass(self.origin, typ)
 
         if self.annotation is AnyStr:
-            return issubclass(str, cl) or issubclass(bytes, cl)
-        return self.annotation is not Any and not self.is_type_var and issubclass(self.annotation, cl)
+            return issubclass(str, typ) or issubclass(bytes, typ)
+        return self.annotation is not Any and not self.is_type_var and issubclass(self.annotation, typ)
 
     def has_inner_subclass_of(self, cl: type[Any] | tuple[type[Any], ...]) -> bool:
         """Whether any generic args are a subclass of the given type.
@@ -171,7 +171,7 @@ class TypeView(Generic[T]):
         Returns:
             Whether any of the type's generic args are a subclass of the given type.
         """
-        return any(t.is_subclass_of(cl) for t in self.inner_types)
+        return any(t.is_subtype_of(cl) for t in self.inner_types)
 
     def strip_optional(self) -> TypeView:
         if not self.is_optional:

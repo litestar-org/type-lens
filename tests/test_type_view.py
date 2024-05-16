@@ -257,13 +257,13 @@ def test_parsed_type_is_optional_predicate() -> None:
 
 def test_parsed_type_is_subclass_of() -> None:
     """Test ParsedType.is_type_of."""
-    assert TypeView(bool).is_subclass_of(int) is True
-    assert TypeView(bool).is_subclass_of(str) is False
-    assert TypeView(Union[int, str]).is_subclass_of(int) is False
-    assert TypeView(list[int]).is_subclass_of(list) is True
-    assert TypeView(list[int]).is_subclass_of(int) is False
-    assert TypeView(Optional[int]).is_subclass_of(int) is False
-    assert TypeView(Union[bool, int]).is_subclass_of(int) is True
+    assert TypeView(bool).is_subtype_of(int) is True
+    assert TypeView(bool).is_subtype_of(str) is False
+    assert TypeView(Union[int, str]).is_subtype_of(int) is False
+    assert TypeView(list[int]).is_subtype_of(list) is True
+    assert TypeView(list[int]).is_subtype_of(int) is False
+    assert TypeView(Optional[int]).is_subtype_of(int) is False
+    assert TypeView(Union[bool, int]).is_subtype_of(int) is True
 
 
 def test_parsed_type_has_inner_subclass_of() -> None:
