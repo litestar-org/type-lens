@@ -162,16 +162,16 @@ class TypeView(Generic[T]):
             return issubclass(str, typ) or issubclass(bytes, typ)
         return self.annotation is not Any and not self.is_type_var and issubclass(self.annotation, typ)
 
-    def has_inner_subclass_of(self, cl: type[Any] | tuple[type[Any], ...]) -> bool:
+    def has_inner_subtype_of(self, typ: type[Any] | tuple[type[Any], ...]) -> bool:
         """Whether any generic args are a subclass of the given type.
 
         Args:
-            cl: The type to check, or tuple of types. Passed as 2nd argument to ``issubclass()``.
+            typ: The type to check, or tuple of types. Passed as 2nd argument to ``issubclass()``.
 
         Returns:
             Whether any of the type's generic args are a subclass of the given type.
         """
-        return any(t.is_subtype_of(cl) for t in self.inner_types)
+        return any(t.is_subtype_of(typ) for t in self.inner_types)
 
     def strip_optional(self) -> TypeView:
         if not self.is_optional:

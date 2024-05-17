@@ -268,9 +268,9 @@ def test_parsed_type_is_subclass_of() -> None:
 
 def test_parsed_type_has_inner_subclass_of() -> None:
     """Test ParsedType.has_type_of."""
-    assert TypeView(list[int]).has_inner_subclass_of(int) is True
-    assert TypeView(list[int]).has_inner_subclass_of(str) is False
-    assert TypeView(list[Union[int, str]]).has_inner_subclass_of(int) is False
+    assert TypeView(list[int]).has_inner_subtype_of(int) is True
+    assert TypeView(list[int]).has_inner_subtype_of(str) is False
+    assert TypeView(list[Union[int, str]]).has_inner_subtype_of(int) is False
 
 
 def test_parsed_type_equality() -> None:
