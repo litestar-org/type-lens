@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 from inspect import Parameter
+from typing import Any
 
-import pytest
-
-from type_lens.exc import ParameterViewError
 from type_lens.parameter_view import ParameterView
+from type_lens.type_view import TypeView
 from type_lens.types.empty import Empty
 
 
@@ -18,11 +17,10 @@ def test_param_view() -> None:
     assert param_view.type_view.annotation is int
 
 
-def test_param_view_raises_improperly_configured_if_no_annotation() -> None:
-    """Test ParameterView raises ImproperlyConfigured if no annotation."""
+def test_from_parameter_coerces_empty_annotation() -> None:
     param = Parameter("foo", Parameter.POSITIONAL_OR_KEYWORD)
-    with pytest.raises(ParameterViewError):
-        ParameterView.from_parameter(param, {})
+
+    assert ParameterView.from_parameter(param, {}).type_view == TypeView(Any)
 
 
 def test_param_view_has_default_predicate() -> None:
@@ -34,3 +32,12 @@ def test_param_view_has_default_predicate() -> None:
     param = Parameter("foo", Parameter.POSITIONAL_OR_KEYWORD, annotation=int, default=42)
     param_view = ParameterView.from_parameter(param, {"foo": int})
     assert param_view.has_default is True
+
+
+def test_param_view_repr() -> None:
+    assert repr(ParameterView("str")).replace("typing.", "") == "ParameterView('str', TypeView(Any))"
+    assert repr(ParameterView("str", TypeView(int))) == "ParameterView('str', TypeView(int))"
+    assert (
+        repr(ParameterView("str", default=True)).replace("typing.", "")
+        == "ParameterView('str', TypeView(Any), default=True)"
+    )
