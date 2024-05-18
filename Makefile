@@ -84,7 +84,7 @@ mypy:                                               ## Run mypy
 .PHONY: mypy-nocache
 mypy-nocache:                                       ## Run Mypy without cache
 	@echo "=> Running mypy without a cache"
-	@$(PDM) run dmypy run -- --cache-dir=/dev/null
+	@$(PDM) run mypy
 	@echo "=> mypy complete"
 
 .PHONY: pyright
@@ -102,8 +102,14 @@ pre-commit: 										## Runs pre-commit hooks; includes ruff formatting and lin
 	@$(PDM) run pre-commit run --all-files
 	@echo "=> Pre-commit complete"
 
+.PHONY: slotscheck
+slotscheck: 										## Run slotscheck
+	@echo "=> Running slotscheck"
+	@$(PDM) run slotscheck type_lens/
+	@echo "=> slotscheck complete"
+
 .PHONY: lint
-lint: pre-commit type-check 						## Run all linting
+lint: pre-commit type-check slotscheck						## Run all linting
 
 .PHONY: coverage
 coverage:  											## Run the tests and generate coverage report
