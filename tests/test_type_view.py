@@ -1,21 +1,22 @@
 # ruff: noqa: UP006
 from __future__ import annotations
 
+import sys
 from typing import (
     TYPE_CHECKING,
-    Annotated,
     Any,
     ForwardRef,
+    List,
     Literal,
     Optional,
+    Tuple,
     TypedDict,
     TypeVar,
     Union,
-    get_type_hints,
 )
 
 import pytest
-from typing_extensions import NotRequired, Required
+from typing_extensions import Annotated, NotRequired, Required, get_type_hints
 
 from type_lens import TypeView
 from type_lens.types.builtins import NoneType
@@ -40,11 +41,11 @@ _type_lens_int: Final = TypeView(int)
 
 class _TD(TypedDict):
     req_int: Required[int]
-    req_list_int: Required[list[int]]
+    req_list_int: Required[List[int]]
     not_req_int: NotRequired[int]
-    not_req_list_int: NotRequired[list[int]]
+    not_req_list_int: NotRequired[List[int]]
     ann_req_int: Required[Annotated[int, "foo"]]
-    ann_req_list_int: Required[Annotated[list[int], "foo"]]
+    ann_req_list_int: Required[Annotated[List[int], "foo"]]
 
 
 _typed_dict_hints: Final = get_type_hints(_TD, include_extras=True)
@@ -68,10 +69,10 @@ _typed_dict_hints: Final = get_type_hints(_TD, include_extras=True)
             },
         ),
         (
-            list[int],
+            List[int],
             {
-                "raw": list[int],
-                "annotation": list[int],
+                "raw": List[int],
+                "annotation": List[int],
                 "origin": list,
                 "args": (int,),
                 "metadata": (),
@@ -95,10 +96,10 @@ _typed_dict_hints: Final = get_type_hints(_TD, include_extras=True)
             },
         ),
         (
-            Annotated[list[int], "foo"],
+            Annotated[List[int], "foo"],
             {
-                "raw": Annotated[list[int], "foo"],
-                "annotation": list[int],
+                "raw": Annotated[List[int], "foo"],
+                "annotation": List[int],
                 "origin": list,
                 "args": (int,),
                 "metadata": ("foo",),
@@ -126,7 +127,7 @@ _typed_dict_hints: Final = get_type_hints(_TD, include_extras=True)
             _typed_dict_hints["req_list_int"],
             {
                 "raw": _typed_dict_hints["req_list_int"],
-                "annotation": list[int],
+                "annotation": List[int],
                 "origin": list,
                 "args": (int,),
                 "metadata": (),
@@ -154,7 +155,7 @@ _typed_dict_hints: Final = get_type_hints(_TD, include_extras=True)
             _typed_dict_hints["not_req_list_int"],
             {
                 "raw": _typed_dict_hints["not_req_list_int"],
-                "annotation": list[int],
+                "annotation": List[int],
                 "origin": list,
                 "args": (int,),
                 "metadata": (),
@@ -182,7 +183,7 @@ _typed_dict_hints: Final = get_type_hints(_TD, include_extras=True)
             _typed_dict_hints["ann_req_list_int"],
             {
                 "raw": _typed_dict_hints["ann_req_list_int"],
-                "annotation": list[int],
+                "annotation": List[int],
                 "origin": list,
                 "args": (int,),
                 "metadata": ("foo",),
@@ -201,17 +202,17 @@ def test_parsed_type_from_annotation(annotation: Any, expected: dict[str, Any]) 
 
 def test_parsed_type_from_union_annotation() -> None:
     """Test ParsedType.from_annotation for Union."""
-    annotation = Union[int, list[int]]
+    annotation = Union[int, List[int]]
     expected = {
         "raw": annotation,
         "annotation": annotation,
         "origin": Union,
-        "args": (int, list[int]),
+        "args": (int, List[int]),
         "metadata": (),
         "is_annotated": False,
         "is_required": False,
         "is_not_required": False,
-        "inner_types": (TypeView(int), TypeView(list[int])),
+        "inner_types": (TypeView(int), TypeView(List[int])),
     }
     _check_parsed_type(TypeView(annotation), expected)
 
@@ -260,41 +261,41 @@ def test_parsed_type_is_subtype_of() -> None:
     assert TypeView(bool).is_subtype_of(int) is True
     assert TypeView(bool).is_subtype_of(str) is False
     assert TypeView(Union[int, str]).is_subtype_of(int) is False
-    assert TypeView(list[int]).is_subtype_of(list) is True
-    assert TypeView(list[int]).is_subtype_of(int) is False
+    assert TypeView(List[int]).is_subtype_of(list) is True
+    assert TypeView(List[int]).is_subtype_of(int) is False
     assert TypeView(Optional[int]).is_subtype_of(int) is False
     assert TypeView(Union[bool, int]).is_subtype_of(int) is True
 
 
 def test_parsed_type_has_inner_subtype_of() -> None:
     """Test ParsedType.has_type_of."""
-    assert TypeView(list[int]).has_inner_subtype_of(int) is True
-    assert TypeView(list[int]).has_inner_subtype_of(str) is False
-    assert TypeView(list[Union[int, str]]).has_inner_subtype_of(int) is False
+    assert TypeView(List[int]).has_inner_subtype_of(int) is True
+    assert TypeView(List[int]).has_inner_subtype_of(str) is False
+    assert TypeView(List[Union[int, str]]).has_inner_subtype_of(int) is False
 
 
 def test_parsed_type_equality() -> None:
     assert TypeView(int) == TypeView(int)
     assert TypeView(int) == TypeView(Annotated[int, "meta"])
     assert TypeView(int) != int
-    assert TypeView(list[int]) == TypeView(list[int])
-    assert TypeView(list[int]) != TypeView(list[str])
-    assert TypeView(list[str]) != TypeView(tuple[str])
+    assert TypeView(List[int]) == TypeView(List[int])
+    assert TypeView(List[int]) != TypeView(List[str])
+    assert TypeView(List[str]) != TypeView(Tuple[str])
     assert TypeView(Optional[str]) == TypeView(Union[str, None])
 
 
 def test_tuple() -> None:
-    assert TypeView(list[int]).is_tuple is False
-    assert TypeView(list[int]).is_variadic_tuple is False
+    assert TypeView(List[int]).is_tuple is False
+    assert TypeView(List[int]).is_variadic_tuple is False
 
-    assert TypeView(tuple[int]).is_tuple is True
-    assert TypeView(tuple[int]).is_variadic_tuple is False
+    assert TypeView(Tuple[int]).is_tuple is True
+    assert TypeView(Tuple[int]).is_variadic_tuple is False
 
-    assert TypeView(tuple[int, int]).is_tuple is True
-    assert TypeView(tuple[int, int]).is_variadic_tuple is False
+    assert TypeView(Tuple[int, int]).is_tuple is True
+    assert TypeView(Tuple[int, int]).is_variadic_tuple is False
 
-    assert TypeView(tuple[int, ...]).is_tuple is True
-    assert TypeView(tuple[int, ...]).is_variadic_tuple is True
+    assert TypeView(Tuple[int, ...]).is_tuple is True
+    assert TypeView(Tuple[int, ...]).is_variadic_tuple is True
 
 
 def test_strip_optional() -> None:
@@ -308,7 +309,10 @@ def test_strip_optional() -> None:
 
 def test_repr() -> None:
     assert repr(TypeView(int)) == "TypeView(int)"
-    assert repr(TypeView(Optional[str])) == "TypeView(typing.Optional[str])"
+    if sys.version_info < (3, 9):
+        assert repr(TypeView(Optional[str])) == "TypeView(typing.Union[str, NoneType])"
+    else:
+        assert repr(TypeView(Optional[str])) == "TypeView(typing.Optional[str])"
     assert repr(TypeView(Literal["1", 2, True])) == "TypeView(typing.Literal['1', 2, True])"
 
 
@@ -330,3 +334,23 @@ def test_allows_none() -> None:
     assert TypeView(int).allows_none is False
     assert TypeView(Optional[int]).allows_none is True
     assert TypeView(None).allows_none is True
+
+
+@pytest.mark.parametrize(
+    ("annotation", "expected"),
+    [
+        (int, None),
+        (Optional[int], Union),
+        (Union[int, None], Union),
+        pytest.param(
+            "int | str", Union, marks=pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires Python 3.10")
+        ),
+        pytest.param(
+            "list[int]", List, marks=pytest.mark.skipif(sys.version_info < (3, 9), reason="Requires Python 3.9")
+        ),
+    ],
+)
+def test_safe_generic_origin(annotation: Any, expected: Any) -> None:
+    if isinstance(annotation, str):
+        annotation = eval(annotation)
+    assert TypeView(annotation).safe_generic_origin is expected

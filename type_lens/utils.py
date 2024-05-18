@@ -5,16 +5,71 @@ from collections import abc, defaultdict, deque
 
 import typing_extensions as te
 
+from type_lens.types.builtins import UNION_TYPES
+
+if t.TYPE_CHECKING:
+    from type_lens import TypeView
+
 __all__ = (
     "get_instantiable_origin",
+    "get_safe_generic_origin",
     "unwrap_annotation",
 )
 
+_SAFE_GENERIC_ORIGIN_MAP: te.Final[dict[object, object]] = {
+    set: t.AbstractSet,
+    defaultdict: t.DefaultDict,
+    deque: t.Deque,
+    dict: t.Dict,
+    frozenset: t.FrozenSet,
+    list: t.List,
+    tuple: t.Tuple,
+    abc.Mapping: t.Mapping,
+    abc.MutableMapping: t.MutableMapping,
+    abc.MutableSequence: t.MutableSequence,
+    abc.MutableSet: t.MutableSet,
+    abc.Sequence: t.Sequence,
+    abc.Set: t.AbstractSet,
+    abc.Collection: t.Collection,
+    abc.Container: t.Container,
+    abc.ItemsView: t.ItemsView,
+    abc.KeysView: t.KeysView,
+    abc.MappingView: t.MappingView,
+    abc.ValuesView: t.ValuesView,
+    abc.Iterable: t.Iterable,
+    abc.Iterator: t.Iterator,
+    abc.Generator: t.Generator,
+    abc.Reversible: t.Reversible,
+    abc.Coroutine: t.Coroutine,
+    abc.AsyncGenerator: t.AsyncGenerator,
+    abc.AsyncIterable: t.AsyncIterable,
+    abc.AsyncIterator: t.AsyncIterator,
+    abc.Awaitable: t.Awaitable,
+    **{union_t: t.Union for union_t in UNION_TYPES},
+}
+"""A mapping of types to equivalent types that are safe to be used as generics across all Python versions.
+
+This is necessary because occasionally we want to rebuild a generic outer type with different args, and types such as
+``collections.abc.Mapping``, are not valid generic types in Python 3.8.
+"""
 
 _WRAPPER_TYPES: te.Final = {te.Annotated, te.Required, te.NotRequired}
 """Types that always contain a wrapped type annotation as their first arg."""
 
 _INSTANTIABLE_TYPE_MAPPING: te.Final = {
+    t.AbstractSet: set,
+    t.DefaultDict: defaultdict,
+    t.Deque: deque,
+    t.Dict: dict,
+    t.FrozenSet: frozenset,
+    t.List: list,
+    t.Mapping: dict,
+    t.MutableMapping: dict,
+    t.MutableSequence: list,
+    t.MutableSet: set,
+    t.Sequence: list,
+    t.Set: set,
+    t.Tuple: tuple,
     abc.Mapping: dict,
     abc.MutableMapping: dict,
     abc.MutableSequence: list,
@@ -32,23 +87,35 @@ _INSTANTIABLE_TYPE_MAPPING: te.Final = {
 """A mapping of types to equivalent types that are safe to instantiate."""
 
 
-def get_instantiable_origin(origin_type: t.Any, annotation: t.Any) -> t.Any:
+def get_instantiable_origin(type_view: TypeView) -> t.Any:
     """Get a type that is safe to instantiate for the given origin type.
 
     If a builtin collection type is annotated without generic args, e.g, ``a: dict``, then the origin type will be
     ``None``. In this case, we can use the annotation to determine the correct instantiable type, if one exists.
 
     Args:
-        origin_type: A type - would be the return value of :func:`get_origin()`.
-        annotation: Type annotation associated with the origin type. Should be unwrapped from any wrapper types, such
-            as ``Annotated``.
+        type_view: A :class:`TypeView` instance.
 
     Returns:
         A builtin type that is safe to instantiate for the given origin type.
     """
-    if origin_type is None:
-        return _INSTANTIABLE_TYPE_MAPPING.get(annotation)
-    return _INSTANTIABLE_TYPE_MAPPING.get(origin_type, origin_type)
+    if type_view.origin is None:
+        return _INSTANTIABLE_TYPE_MAPPING.get(type_view.annotation)
+    return _INSTANTIABLE_TYPE_MAPPING.get(type_view.origin, type_view.origin)
+
+
+def get_safe_generic_origin(type_view: TypeView) -> t.Any | None:
+    """Get a type that is safe to use as a generic type across all supported Python versions.
+
+    Args:
+        type_view: A :class:`TypeView` instance.
+
+    Returns:
+        A type that is safe to use as a generic type across all supported Python versions.
+    """
+    if type_view.origin is None:
+        return _SAFE_GENERIC_ORIGIN_MAP.get(type_view.annotation)
+    return _SAFE_GENERIC_ORIGIN_MAP.get(type_view.origin)
 
 
 def unwrap_annotation(annotation: t.Any) -> tuple[t.Any, tuple[t.Any, ...], set[t.Any]]:
