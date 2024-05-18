@@ -1,5 +1,5 @@
 default_language_version:
-  python: "3.9"
+  python: "3.8"
 repos:
   - repo: https://github.com/compilerla/conventional-pre-commit
     rev: v3.1.0

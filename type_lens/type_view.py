@@ -2,12 +2,12 @@ from __future__ import annotations
 
 from collections import abc
 from collections.abc import Collection, Mapping
-from typing import Annotated, Any, AnyStr, Final, ForwardRef, Generic, Literal, TypeVar, Union
+from typing import Any, AnyStr, Final, ForwardRef, Generic, Literal, TypeVar, Union
 
-from typing_extensions import NotRequired, Required, get_args, get_origin
+from typing_extensions import Annotated, NotRequired, Required, get_args, get_origin
 
 from type_lens.types.builtins import UNION_TYPES, NoneType
-from type_lens.utils import get_instantiable_origin, unwrap_annotation
+from type_lens.utils import get_instantiable_origin, get_safe_generic_origin, unwrap_annotation
 
 __all__ = ("TypeView",)
 
@@ -53,7 +53,7 @@ class TypeView(Generic[T]):
         self.origin: Final = origin
         self.args: Final = args
         self.metadata: Final = metadata
-        self.instantiable_origin: Final = get_instantiable_origin(origin, unwrapped)
+        self.instantiable_origin: Final = get_instantiable_origin(self)
         self.is_annotated: Final = Annotated in wrappers
         self.is_required: Final = Required in wrappers
         self.is_not_required: Final = NotRequired in wrappers
@@ -139,6 +139,17 @@ class TypeView(Generic[T]):
     def is_non_string_collection(self) -> bool:
         """Whether the annotation is a non-string collection type or not."""
         return self.is_collection and not self.is_subtype_of((str, bytes))
+
+    @property
+    def safe_generic_origin(self) -> Any:
+        """An object safe to be used as a generic type across all supported Python versions.
+
+        Examples:
+            >>> from type_lens import TypeView
+            >>> TypeView(dict[str, int]).safe_generic_origin
+            typing.Dict
+        """
+        return get_safe_generic_origin(self)
 
     def is_subtype_of(self, typ: Any | tuple[Any, ...], /) -> bool:
         """Whether the annotation is a subtype of the given type.

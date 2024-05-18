@@ -24,6 +24,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Natural Language :: English",
     "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -39,7 +40,7 @@ version = "0.1.0a1"
 description = "type-lens is a Python template project designed to simplify the setup of a new project."
 readme = "README.md"
 license = { text = "MIT" }
-requires-python = ">=3.9,<4.0"
+requires-python = ">=3.8,<4.0"
 dependencies = [
 ]
 
@@ -110,7 +111,7 @@ xfail_strict = true
 
 [tool.mypy]
 packages = ["type_lens", "tests"]
-python_version = "3.9"
+python_version = "3.8"
 
 disallow_any_generics = false
 disallow_untyped_decorators = true
@@ -131,7 +132,7 @@ exclude = [
     "docs",
 ]
 include = ["type_lens", "tests"]
-pythonVersion = "3.9"
+pythonVersion = "3.8"
 reportUnnecessaryTypeIgnoreComments = true
 
 
@@ -197,7 +198,7 @@ lint.ignore = [
     "ISC001", # Ruff formatter incompatible
 ]
 src = ["type_lens", "tests", "docs/examples"]
-target-version = "py39"
+target-version = "py38"
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
