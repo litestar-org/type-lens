@@ -21,15 +21,11 @@ class TypeView(Generic[T]):
     __slots__ = {
         "annotation": "The annotation with any 'wrapper' types removed, e.g. Annotated.",
         "args": "The result of calling get_args(annotation) after unwrapping Annotated, e.g. (int,).",
-        "generic_origin": "An equivalent type to origin that can be safely used as a generic type across all supported Python versions.",
         "inner_types": "The type's generic args parsed as ParsedType, if applicable.",
-        "instantiable_origin": "An equivalent type to origin that can be safely instantiated. E.g., Sequence -> list.",
-        "is_annotated": "Whether the annotation included Annotated or not.",
-        "is_not_required": "Whether the annotation included NotRequired or not.",
-        "is_required": "Whether the annotation included Required or not.",
         "metadata": "Any metadata associated with the annotation via Annotated.",
         "origin": "The result of calling get_origin(annotation) after unwrapping Annotated, e.g. list.",
         "raw": "The annotation exactly as received.",
+        "_wrappers": "A set of wrapper types that were removed from the annotation.",
     }
 
     def __init__(self, annotation: T) -> None:
@@ -53,10 +49,7 @@ class TypeView(Generic[T]):
         self.origin: Final = origin
         self.args: Final = args
         self.metadata: Final = metadata
-        self.instantiable_origin: Final = get_instantiable_origin(self)
-        self.is_annotated: Final = Annotated in wrappers
-        self.is_required: Final = Required in wrappers
-        self.is_not_required: Final = NotRequired in wrappers
+        self._wrappers: Final = wrappers
         self.inner_types: Final = tuple(TypeView(arg) for arg in args)
 
     def __eq__(self, other: object) -> bool:
@@ -82,9 +75,42 @@ class TypeView(Generic[T]):
         return self.is_optional or self.is_none_type
 
     @property
+    def instantiable_origin(self) -> Any:
+        """An instantiable type that is consistent with the origin type of the annotation.
+
+        Examples:
+            >>> from type_lens import TypeView
+            >>> from collections.abc import Sequence
+            >>> TypeView(Sequence[int]).instantiable_origin
+            <class 'list'>
+
+        Returns:
+            An instantiable type that is consistent with the origin type of the annotation.
+        """
+        return get_instantiable_origin(self)
+
+    @property
+    def is_annotated(self) -> bool:
+        """Whether the annotation was wrapped in Annotated or not.
+
+        This would indicate that the annotation has metadata associated with it.
+        """
+        return Annotated in self._wrappers
+
+    @property
+    def is_collection(self) -> bool:
+        """Whether the annotation is a collection type or not."""
+        return self.is_subtype_of(Collection)
+
+    @property
     def is_forward_ref(self) -> bool:
         """Whether the annotation is a forward reference or not."""
         return isinstance(self.annotation, (str, ForwardRef))
+
+    @property
+    def is_literal(self) -> bool:
+        """Whether the annotation is a literal value or not."""
+        return self.origin is Literal
 
     @property
     def is_mapping(self) -> bool:
@@ -92,18 +118,34 @@ class TypeView(Generic[T]):
         return self.is_subtype_of(Mapping)
 
     @property
+    def is_non_string_collection(self) -> bool:
+        """Whether the annotation is a non-string collection type or not."""
+        return self.is_collection and not self.is_subtype_of((str, bytes))
+
+    @property
+    def is_none_type(self) -> bool:
+        """Whether the annotation is NoneType or not."""
+        return self.annotation in {None, NoneType}
+
+    @property
+    def is_not_required(self) -> bool:
+        """Whether the annotation was wrapped in NotRequired or not."""
+        return NotRequired in self._wrappers
+
+    @property
+    def is_optional(self) -> bool:
+        """Whether the annotation is Optional or not."""
+        return bool(self.is_union and NoneType in self.args)
+
+    @property
+    def is_required(self) -> bool:
+        """Whether the annotation was wrapped in Required or not."""
+        return Required in self._wrappers
+
+    @property
     def is_tuple(self) -> bool:
         """Whether the annotation is a ``tuple`` or not."""
         return self.is_subtype_of(tuple)
-
-    @property
-    def is_variadic_tuple(self) -> bool:
-        """Whether the annotation is a ``tuple`` **and** is of unbounded length.
-
-        Tuples like `tuple[int, ...]` represent a list-like unbounded sequence
-        of a single type T.
-        """
-        return self.is_tuple and len(self.args) == 2 and self.args[1] == ...
 
     @property
     def is_type_var(self) -> bool:
@@ -116,29 +158,13 @@ class TypeView(Generic[T]):
         return self.origin in UNION_TYPES
 
     @property
-    def is_optional(self) -> bool:
-        """Whether the annotation is Optional or not."""
-        return bool(self.is_union and NoneType in self.args)
+    def is_variadic_tuple(self) -> bool:
+        """Whether the annotation is a ``tuple`` **and** is of unbounded length.
 
-    @property
-    def is_collection(self) -> bool:
-        """Whether the annotation is a collection type or not."""
-        return self.is_subtype_of(Collection)
-
-    @property
-    def is_none_type(self) -> bool:
-        """Whether the annotation is NoneType or not."""
-        return self.annotation in {None, NoneType}
-
-    @property
-    def is_literal(self) -> bool:
-        """Whether the annotation is a literal value or not."""
-        return self.origin is Literal
-
-    @property
-    def is_non_string_collection(self) -> bool:
-        """Whether the annotation is a non-string collection type or not."""
-        return self.is_collection and not self.is_subtype_of((str, bytes))
+        Tuples like `tuple[int, ...]` represent a list-like unbounded sequence
+        of a single type T.
+        """
+        return self.is_tuple and len(self.args) == 2 and self.args[1] == ...
 
     @property
     def safe_generic_origin(self) -> Any:
@@ -150,6 +176,17 @@ class TypeView(Generic[T]):
             typing.Dict
         """
         return get_safe_generic_origin(self)
+
+    def has_inner_subtype_of(self, typ: type[Any] | tuple[type[Any], ...]) -> bool:
+        """Whether any generic args are a subclass of the given type.
+
+        Args:
+            typ: The type to check, or tuple of types. Passed as 2nd argument to ``issubclass()``.
+
+        Returns:
+            Whether any of the type's generic args are a subclass of the given type.
+        """
+        return any(t.is_subtype_of(typ) for t in self.inner_types)
 
     def is_subtype_of(self, typ: Any | tuple[Any, ...], /) -> bool:
         """Whether the annotation is a subtype of the given type.
@@ -172,17 +209,6 @@ class TypeView(Generic[T]):
         if self.annotation is AnyStr:
             return issubclass(str, typ) or issubclass(bytes, typ)
         return self.annotation is not Any and not self.is_type_var and issubclass(self.annotation, typ)
-
-    def has_inner_subtype_of(self, typ: type[Any] | tuple[type[Any], ...]) -> bool:
-        """Whether any generic args are a subclass of the given type.
-
-        Args:
-            typ: The type to check, or tuple of types. Passed as 2nd argument to ``issubclass()``.
-
-        Returns:
-            Whether any of the type's generic args are a subclass of the given type.
-        """
-        return any(t.is_subtype_of(typ) for t in self.inner_types)
 
     def strip_optional(self) -> TypeView:
         if not self.is_optional:
