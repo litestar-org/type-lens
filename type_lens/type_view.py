@@ -145,9 +145,6 @@ class TypeView(Generic[T]):
         """An object safe to be used as a generic type across all supported Python versions.
 
         Examples:
-            Python 3.9.18 (main, Oct 26 2023, 08:34:27)
-            [GCC 11.4.0] on linux
-            Type "help", "copyright", "credits" or "license" for more information.
             >>> from type_lens import TypeView
             >>> TypeView(dict[str, int]).safe_generic_origin
             typing.Dict
