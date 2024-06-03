@@ -5,10 +5,12 @@ import sys
 from typing import (
     TYPE_CHECKING,
     Any,
+    Dict,
     ForwardRef,
     List,
     Literal,
     Optional,
+    Sequence,
     Tuple,
     TypedDict,
     TypeVar,
@@ -362,3 +364,24 @@ def test_repr_type() -> None:
 
     if sys.version_info >= (3, 9):
         assert TypeView(set[bool]).repr_type == "set[bool]"
+
+
+def test_instantiatable_origin() -> None:
+    assert TypeView(int).instantiable_origin == int
+    assert TypeView(list).instantiable_origin == list
+    assert TypeView(List[int]).instantiable_origin == list
+    assert TypeView(Dict[int, int]).instantiable_origin == dict
+    assert TypeView(Sequence[int]).instantiable_origin == list
+    assert TypeView(TypeView).instantiable_origin == TypeView
+
+
+def test_fallback_origin() -> None:
+    assert TypeView(int).fallback_origin == int
+    assert TypeView(list).fallback_origin == list
+    assert TypeView(List).fallback_origin == list
+    assert TypeView(List[str]).fallback_origin == list
+    assert TypeView(Literal[1]).fallback_origin == Literal
+    assert TypeView(Literal).fallback_origin == Literal
+
+    if sys.version_info >= (3, 9):
+        assert TypeView(set[bool]).fallback_origin == set
