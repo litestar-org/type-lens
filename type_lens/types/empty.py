@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing_extensions import TypeAlias
+
 __all__ = ("Empty", "EmptyType")
 
 from enum import Enum
@@ -12,5 +14,5 @@ class _EmptyEnum(Enum):
     EMPTY = 0
 
 
-EmptyType = Literal[_EmptyEnum.EMPTY]
+EmptyType: TypeAlias = Literal[_EmptyEnum.EMPTY]
 Empty: Final = _EmptyEnum.EMPTY
