@@ -63,11 +63,25 @@ class TypeView(Generic[T]):
 
     def __repr__(self) -> str:
         cls_name = self.__class__.__name__
+        return f"{cls_name}({self.repr_type})"
 
-        raw = self.raw
-        if isinstance(self.raw, type):
-            raw = raw.__name__  # type: ignore[attr-defined]
-        return f"{cls_name}({raw})"
+    @property
+    def repr_type(self) -> str:
+        if isinstance(self.annotation, type) or self.origin:
+            if self.is_literal:
+                name = "Literal"
+            elif self.is_union:
+                name = "Union"
+            else:
+                name = self.annotation.__name__
+        else:
+            name = repr(self.annotation)
+
+        if self.origin:
+            inner_types = ", ".join(t.repr_type for t in self.inner_types)
+            name = f"{name}[{inner_types}]"
+
+        return str(name)
 
     @property
     def allows_none(self) -> bool:

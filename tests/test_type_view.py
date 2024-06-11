@@ -309,11 +309,8 @@ def test_strip_optional() -> None:
 
 def test_repr() -> None:
     assert repr(TypeView(int)) == "TypeView(int)"
-    if sys.version_info < (3, 9):
-        assert repr(TypeView(Optional[str])) == "TypeView(typing.Union[str, NoneType])"
-    else:
-        assert repr(TypeView(Optional[str])) == "TypeView(typing.Optional[str])"
-    assert repr(TypeView(Literal["1", 2, True])) == "TypeView(typing.Literal['1', 2, True])"
+    assert repr(TypeView(Optional[str])) == "TypeView(Union[str, NoneType])"
+    assert repr(TypeView(Literal["1", 2, True])) == "TypeView(Literal['1', 2, True])"
 
 
 def test_is_none_type() -> None:
@@ -354,3 +351,14 @@ def test_safe_generic_origin(annotation: Any, expected: Any) -> None:
     if isinstance(annotation, str):
         annotation = eval(annotation)
     assert TypeView(annotation).safe_generic_origin is expected
+
+
+def test_repr_type() -> None:
+    assert TypeView(int).repr_type == "int"
+    assert TypeView(str).repr_type == "str"
+    assert TypeView(Optional[int]).repr_type in ("Optional[int]", "Union[int, NoneType]", "Union[int, None]")
+    assert TypeView(Literal[1, "two"]).repr_type == "Literal[1, 'two']"
+    assert TypeView(Union[Literal[1, "two"], bool]).repr_type == "Union[Literal[1, 'two'], bool]"
+
+    if sys.version_info >= (3, 9):
+        assert TypeView(set[bool]).repr_type == "set[bool]"
