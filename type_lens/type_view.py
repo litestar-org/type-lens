@@ -7,7 +7,7 @@ from typing import Any, AnyStr, Final, ForwardRef, Generic, Literal, TypeVar, Un
 from typing_extensions import Annotated, NotRequired, Required, get_args, get_origin
 
 from type_lens.types.builtins import UNION_TYPES, NoneType
-from type_lens.utils import get_instantiable_origin, get_safe_generic_origin, unwrap_annotation
+from type_lens.utils import INSTANTIABLE_TYPE_MAPPING, SAFE_GENERIC_ORIGIN_MAP, unwrap_annotation
 
 __all__ = ("TypeView",)
 
@@ -24,6 +24,7 @@ class TypeView(Generic[T]):
         "inner_types": "The type's generic args parsed as ParsedType, if applicable.",
         "metadata": "Any metadata associated with the annotation via Annotated.",
         "origin": "The result of calling get_origin(annotation) after unwrapping Annotated, e.g. list.",
+        "source": "The unsubscripted version of a type, distinct from 'origin' in that for non-generics, this is the original type.",
         "raw": "The annotation exactly as received.",
         "_wrappers": "A set of wrapper types that were removed from the annotation.",
     }
@@ -47,6 +48,7 @@ class TypeView(Generic[T]):
         self.raw: Final[T] = annotation
         self.annotation: Final = unwrapped
         self.origin: Final = origin
+        self.source: Final = origin or unwrapped
         self.args: Final = args
         self.metadata: Final = metadata
         self._wrappers: Final = wrappers
@@ -101,7 +103,7 @@ class TypeView(Generic[T]):
         Returns:
             An instantiable type that is consistent with the origin type of the annotation.
         """
-        return get_instantiable_origin(self)
+        return INSTANTIABLE_TYPE_MAPPING.get(self.source, self.source)
 
     @property
     def is_annotated(self) -> bool:
@@ -182,14 +184,14 @@ class TypeView(Generic[T]):
 
     @property
     def safe_generic_origin(self) -> Any:
-        """An object safe to be used as a generic type across all supported Python versions.
+        """A type, safe to be used as a generic type across all supported Python versions.
 
         Examples:
             >>> from type_lens import TypeView
             >>> TypeView(dict[str, int]).safe_generic_origin
             typing.Dict
         """
-        return get_safe_generic_origin(self)
+        return SAFE_GENERIC_ORIGIN_MAP.get(self.source)
 
     def has_inner_subtype_of(self, typ: type[Any] | tuple[type[Any], ...]) -> bool:
         """Whether any generic args are a subclass of the given type.

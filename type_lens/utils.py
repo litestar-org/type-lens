@@ -7,16 +7,9 @@ import typing_extensions as te
 
 from type_lens.types.builtins import UNION_TYPES
 
-if t.TYPE_CHECKING:
-    from type_lens import TypeView
+__all__ = ("unwrap_annotation", "SAFE_GENERIC_ORIGIN_MAP", "INSTANTIABLE_TYPE_MAPPING")
 
-__all__ = (
-    "get_instantiable_origin",
-    "get_safe_generic_origin",
-    "unwrap_annotation",
-)
-
-_SAFE_GENERIC_ORIGIN_MAP: te.Final[dict[object, object]] = {
+SAFE_GENERIC_ORIGIN_MAP: te.Final[dict[object, object]] = {
     set: t.AbstractSet,
     defaultdict: t.DefaultDict,
     deque: t.Deque,
@@ -56,7 +49,7 @@ This is necessary because occasionally we want to rebuild a generic outer type w
 _WRAPPER_TYPES: te.Final = {te.Annotated, te.Required, te.NotRequired}
 """Types that always contain a wrapped type annotation as their first arg."""
 
-_INSTANTIABLE_TYPE_MAPPING: te.Final = {
+INSTANTIABLE_TYPE_MAPPING: te.Final = {
     t.AbstractSet: set,
     t.DefaultDict: defaultdict,
     t.Deque: deque,
@@ -85,37 +78,6 @@ _INSTANTIABLE_TYPE_MAPPING: te.Final = {
     tuple: tuple,
 }
 """A mapping of types to equivalent types that are safe to instantiate."""
-
-
-def get_instantiable_origin(type_view: TypeView) -> t.Any:
-    """Get a type that is safe to instantiate for the given origin type.
-
-    If a builtin collection type is annotated without generic args, e.g, ``a: dict``, then the origin type will be
-    ``None``. In this case, we can use the annotation to determine the correct instantiable type, if one exists.
-
-    Args:
-        type_view: A :class:`TypeView` instance.
-
-    Returns:
-        A builtin type that is safe to instantiate for the given origin type.
-    """
-    if type_view.origin is None:
-        return _INSTANTIABLE_TYPE_MAPPING.get(type_view.annotation)
-    return _INSTANTIABLE_TYPE_MAPPING.get(type_view.origin, type_view.origin)
-
-
-def get_safe_generic_origin(type_view: TypeView) -> t.Any | None:
-    """Get a type that is safe to use as a generic type across all supported Python versions.
-
-    Args:
-        type_view: A :class:`TypeView` instance.
-
-    Returns:
-        A type that is safe to use as a generic type across all supported Python versions.
-    """
-    if type_view.origin is None:
-        return _SAFE_GENERIC_ORIGIN_MAP.get(type_view.annotation)
-    return _SAFE_GENERIC_ORIGIN_MAP.get(type_view.origin)
 
 
 def unwrap_annotation(annotation: t.Any) -> tuple[t.Any, tuple[t.Any, ...], set[t.Any]]:
