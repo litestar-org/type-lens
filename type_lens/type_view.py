@@ -218,11 +218,16 @@ class TypeView(Generic[T]):
             if self.origin in UNION_TYPES:
                 return all(t.is_subtype_of(typ) for t in self.inner_types)
 
-            return self.origin not in UNION_TYPES and issubclass(self.origin, typ)
+            return self.origin not in UNION_TYPES and isinstance(self.origin, type) and issubclass(self.origin, typ)
 
         if self.annotation is AnyStr:
             return issubclass(str, typ) or issubclass(bytes, typ)
-        return self.annotation is not Any and not self.is_type_var and issubclass(self.annotation, typ)
+        return (
+            self.annotation is not Any
+            and not self.is_type_var
+            and isinstance(self.annotation, type)
+            and issubclass(self.annotation, typ)
+        )
 
     def strip_optional(self) -> TypeView:
         if not self.is_optional:

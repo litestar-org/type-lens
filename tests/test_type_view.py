@@ -266,6 +266,9 @@ def test_parsed_type_is_subtype_of() -> None:
     assert TypeView(Optional[int]).is_subtype_of(int) is False
     assert TypeView(Union[bool, int]).is_subtype_of(int) is True
 
+    assert TypeView(None).is_subtype_of(int) is False
+    assert TypeView(Literal[1]).is_subtype_of(int) is False
+
 
 def test_parsed_type_has_inner_subtype_of() -> None:
     """Test ParsedType.has_type_of."""
