@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import inspect
 import sys
+import types
 from typing import TYPE_CHECKING, Any, Callable
 
 from typing_extensions import get_type_hints
@@ -9,30 +10,31 @@ from typing_extensions import get_type_hints
 from type_lens.parameter_view import ParameterView
 from type_lens.type_view import TypeView
 
-__all__ = ("FunctionView",)
+__all__ = ("CallableView",)
 
 
 if TYPE_CHECKING:
     from typing_extensions import Self
 
 
-class FunctionView:
+class CallableView:
     def __init__(self, fn: Callable, type_hints: dict[str, type]):
-        self.function = fn
+        self.callable = fn
         self.signature = getattr(fn, "__signature__", None) or inspect.signature(fn)
 
-        self.return_type = TypeView(type_hints.pop("return", None))
+        return_annotation = type_hints.pop("return", None)
+        self.return_type = TypeView(return_annotation)
 
         self.parameters = tuple(
             ParameterView.from_parameter(param, type_hints) for param in self.signature.parameters.values()
         )
 
     def __eq__(self, other: object) -> bool:
-        if not isinstance(other, FunctionView):
+        if not isinstance(other, CallableView):
             return False
 
         return bool(
-            self.function == other.function
+            self.callable == other.callable
             and self.parameters == other.parameters
             and self.return_type == other.return_type
         )
@@ -40,11 +42,24 @@ class FunctionView:
     def __repr__(self) -> str:
         cls_name = self.__class__.__name__
 
-        return f"{cls_name}({self.function.__name__})"
+        return f"{cls_name}({self.callable.__name__})"
 
     @classmethod
-    def from_type_hints(cls: type[Self], fn: Callable, include_extras: bool = False) -> Self:
-        result = get_type_hints(fn, include_extras=include_extras)
+    def from_callable(
+        cls: type[Self],
+        fn: Callable,
+        *,
+        get_type_hints: Callable = get_type_hints,
+        include_extras: bool = False,
+    ) -> Self:
+        hint_fn = fn
+        if not isinstance(fn, (type, types.FunctionType)):
+            callable_ = getattr(fn, "__call__", None)  # noqa: B004
+            if not callable_:
+                raise ValueError(f"{fn} is not a valid callable.")
+
+            hint_fn = callable_
+        result = get_type_hints(hint_fn, include_extras=include_extras)
         if sys.version_info < (3, 11):  # pragma: no cover
             result = _fix_annotated_optional_type_hints(result)
 
