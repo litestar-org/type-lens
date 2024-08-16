@@ -10,10 +10,11 @@ from typing_extensions import get_type_hints
 from type_lens.parameter_view import ParameterView
 from type_lens.type_view import TypeView
 
+__all__ = ("CallableView",)
+
+
 if TYPE_CHECKING:
     from typing_extensions import Self
-
-__all__ = ("CallableView",)
 
 
 class CallableView:
@@ -48,7 +49,8 @@ class CallableView:
         cls: type[Self],
         fn: Callable,
         *,
-        get_type_hints: Callable = get_type_hints,
+        globalns: dict[str, Any] | None = None,
+        localns: dict[str, Any] | None = None,
         include_extras: bool = False,
     ) -> Self:
         hint_fn = fn
@@ -58,7 +60,7 @@ class CallableView:
                 raise ValueError(f"{fn} is not a valid callable.")
 
             hint_fn = callable_
-        result = get_type_hints(hint_fn, include_extras=include_extras)
+        result = get_type_hints(hint_fn, globalns=globalns, localns=localns, include_extras=include_extras)
         if sys.version_info < (3, 11):  # pragma: no cover
             result = _fix_annotated_optional_type_hints(result)
 
