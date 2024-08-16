@@ -1,14 +1,12 @@
 from __future__ import annotations
 
 import inspect
-import sys
 import types
 from typing import TYPE_CHECKING, Any, Callable
 
-from typing_extensions import get_type_hints
-
 from type_lens.parameter_view import ParameterView
 from type_lens.type_view import TypeView
+from type_lens.typing import get_type_hints
 
 __all__ = ("CallableView",)
 
@@ -60,10 +58,8 @@ class CallableView:
                 raise ValueError(f"{fn} is not a valid callable.")
 
             hint_fn = callable_
-        result = get_type_hints(hint_fn, globalns=globalns, localns=localns, include_extras=include_extras)
-        if sys.version_info < (3, 11):  # pragma: no cover
-            result = _fix_annotated_optional_type_hints(result)
 
+        result = get_type_hints(hint_fn, globalns=globalns, localns=localns, include_extras=include_extras)
         return cls(fn, result)
 
 

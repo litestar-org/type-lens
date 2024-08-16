@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import sys
 from dataclasses import dataclass
-from typing import Any, Optional, Type, Union, cast
+from typing import Any, List, Optional, Type, Union, cast
 
 import pytest
 from typing_extensions import Annotated
@@ -57,10 +59,10 @@ def test_typed_param() -> None:
 
 
 def test_fix_annotated_optional_type_hints() -> None:
-    def fn1(foo: Annotated[Optional[int], "d"] = None) -> Optional[int]:
+    def fn1(foo: Annotated[Optional[int], "d"] = None) -> Optional[int]:  # noqa: UP007
         return foo
 
-    def fn2(foo: Annotated[Optional[int], "d"] = None) -> Optional[int]:
+    def fn2(foo: Annotated[Optional[int], "d"] = None) -> Optional[int]:  # noqa: UP007
         return foo
 
     fn_view1 = CallableView.from_callable(fn1, include_extras=True)
@@ -123,8 +125,21 @@ def test_instance_method() -> None:
     ],
 )
 def test_parameters_with_none_default(hint: Any) -> None:
-    def fn(plain: hint = None, annotated: Annotated[hint, ...] = None) -> None: ...
+    def fn(plain: hint = None, annotated: Annotated[hint, ...] = None) -> None: ...  # pyright: ignore
 
-    fn_view = CallableView.from_callable(fn, include_extras=True)
+    fn_view = CallableView.from_callable(fn, localns=locals(), include_extras=True)
     plain_param, annotated_param = fn_view.parameters
     assert plain_param.type_view.annotation == annotated_param.type_view.annotation
+
+
+def test_evaluated_runtime_type() -> None:
+    @dataclass
+    class Foo:
+        a: list[int] | None = None
+
+    fn_view1 = CallableView.from_callable(Foo, include_extras=True)
+
+    if sys.version_info < (3, 10):
+        assert fn_view1.parameters == (ParameterView("a", TypeView(Union[List[int], None]), default=None),)  # pyright: ignore
+    else:
+        assert fn_view1.parameters == (ParameterView("a", TypeView(Union[list[int], None]), default=None),)  # pyright: ignore
