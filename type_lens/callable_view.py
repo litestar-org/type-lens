@@ -10,11 +10,10 @@ from typing_extensions import get_type_hints
 from type_lens.parameter_view import ParameterView
 from type_lens.type_view import TypeView
 
-__all__ = ("CallableView",)
-
-
 if TYPE_CHECKING:
     from typing_extensions import Self
+
+__all__ = ("CallableView",)
 
 
 class CallableView:
@@ -54,7 +53,7 @@ class CallableView:
     ) -> Self:
         hint_fn = fn
         if not isinstance(fn, (type, types.FunctionType)):
-            callable_ = getattr(fn, "__call__", None)  # noqa: B004
+            callable_ = getattr(fn, "__func__", None) or getattr(fn, "__call__", None)  # noqa: B004
             if not callable_:
                 raise ValueError(f"{fn} is not a valid callable.")
 

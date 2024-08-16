@@ -94,3 +94,14 @@ def test_class_instance() -> None:
 
     fn_view1 = CallableView.from_callable(foo, include_extras=True)
     assert fn_view1.parameters == (ParameterView("c", TypeView(bool)),)
+
+
+def test_instance_method() -> None:
+    class Foo:
+        def method(self, c: bool) -> bool:
+            return c
+
+    foo = Foo()
+
+    fn_view1 = CallableView.from_callable(foo.method, include_extras=True)
+    assert fn_view1.parameters == (ParameterView("c", TypeView(bool)),)
