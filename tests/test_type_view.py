@@ -259,7 +259,14 @@ def test_parsed_type_is_optional_predicate() -> None:
 
 
 def test_parsed_type_is_subtype_of() -> None:
-    """Test ParsedType.is_type_of."""
+    """Test TypeView.is_subtype_of."""
+
+    class Foo:
+        pass
+
+    class Bar(Foo):
+        pass
+
     assert TypeView(bool).is_subtype_of(int) is True
     assert TypeView(bool).is_subtype_of(str) is False
     assert TypeView(Union[int, str]).is_subtype_of(int) is False
@@ -267,6 +274,31 @@ def test_parsed_type_is_subtype_of() -> None:
     assert TypeView(List[int]).is_subtype_of(int) is False
     assert TypeView(Optional[int]).is_subtype_of(int) is False
     assert TypeView(Union[bool, int]).is_subtype_of(int) is True
+
+    assert TypeView(Foo).is_subtype_of(Foo) is True
+    assert TypeView(Bar).is_subtype_of(Foo) is True
+
+
+def test_is_subclass_of() -> None:
+    class Foo:
+        pass
+
+    class Bar(Foo):
+        pass
+
+    assert TypeView(bool).is_subclass_of(int) is True
+    assert TypeView(bool).is_subclass_of(str) is False
+    assert TypeView(Union[int, str]).is_subclass_of(int) is False
+    assert TypeView(List[int]).is_subclass_of(int) is False
+    assert TypeView(Optional[int]).is_subclass_of(int) is False
+    assert TypeView(None).is_subclass_of(int) is False
+    assert TypeView(Literal[1]).is_subclass_of(int) is False
+    assert TypeView(Union[bool, int]).is_subclass_of(int) is False
+
+    assert TypeView(bool).is_subclass_of(bool) is True
+    assert TypeView(List[int]).is_subclass_of(list) is True
+    assert TypeView(Foo).is_subclass_of(Foo) is True
+    assert TypeView(Bar).is_subclass_of(Foo) is True
 
 
 def test_parsed_type_has_inner_subtype_of() -> None:
