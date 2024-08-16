@@ -105,3 +105,22 @@ def test_instance_method() -> None:
 
     fn_view1 = CallableView.from_callable(foo.method, include_extras=True)
     assert fn_view1.parameters == (ParameterView("c", TypeView(bool)),)
+
+
+@pytest.mark.parametrize(
+    ("hint",),
+    [
+        (Optional[str],),
+        (Union[str, None],),
+        (Union[str, int, None],),
+        (Optional[Union[str, int]],),
+        (Union[str, int],),
+        (str,),
+    ],
+)
+def test_parameters_with_none_default(hint: Any) -> None:
+    def fn(plain: hint = None, annotated: Annotated[hint, ...] = None) -> None: ...
+
+    fn_view = CallableView.from_callable(fn, include_extras=True)
+    plain_param, annotated_param = fn_view.parameters
+    assert plain_param.type_view.annotation == annotated_param.type_view.annotation
