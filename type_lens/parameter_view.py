@@ -1,20 +1,19 @@
 from __future__ import annotations
 
 from inspect import Signature
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING, Any, Final
 
-from type_lens.exc import ParameterViewError
 from type_lens.type_view import TypeView
 from type_lens.types.empty import Empty, EmptyType
 
 __all__ = ("ParameterView",)
 
-
 if TYPE_CHECKING:
     from inspect import Parameter
-    from typing import Any
 
     from typing_extensions import Self
+
+_any_type_view = TypeView(Any)
 
 
 class ParameterView:
@@ -26,10 +25,27 @@ class ParameterView:
         "type_view": "View of the parameter's annotation type.",
     }
 
-    def __init__(self, name: str, type_view: TypeView, *, default: Any | EmptyType = Empty) -> None:
+    def __init__(self, name: str, type_view: TypeView = _any_type_view, *, default: Any | EmptyType = Empty) -> None:
         self.name: Final = name
         self.type_view: Final = type_view
         self.default: Final = default
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, ParameterView):
+            return False
+
+        return bool(self.name == other.name and self.type_view == other.type_view and self.default == other.default)
+
+    def __repr__(self) -> str:
+        cls_name = self.__class__.__name__
+
+        args = [
+            repr(self.name),
+            repr(self.type_view) if self.type_view else None,
+            f"default={self.default}" if self.default is not Empty else None,
+        ]
+        args_str = ", ".join(a for a in args if a is not None)
+        return f"{cls_name}({args_str})"
 
     @property
     def has_default(self) -> bool:
@@ -48,11 +64,7 @@ class ParameterView:
         Returns:
             ParsedSignatureParameter.
         """
-        try:
-            annotation = fn_type_hints[parameter.name]
-        except KeyError as err:
-            msg = f"No annotation found for '{parameter.name}'"
-            raise ParameterViewError(msg) from err
+        annotation = fn_type_hints.get(parameter.name, Any)
 
         return cls(
             name=parameter.name,
