@@ -59,7 +59,9 @@ class TypeView(Generic[T]):
             return False
 
         if self.origin:
-            return bool(self.origin == other.origin and self.inner_types == other.inner_types)
+            self_origin = Union if self.is_union else self.origin
+            other_origin = Union if other.is_union else other.origin
+            return bool(self_origin == other_origin and self.inner_types == other.inner_types)
 
         return bool(self.annotation == other.annotation)
 

@@ -43,6 +43,7 @@ readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.8,<4.0"
 dependencies = [
+  "eval-type-backport; python_version<'3.10'"
 ]
 
 [project.urls]
@@ -71,7 +72,7 @@ docs = [
 ]
 lint = [
     "codecov-cli",
-    "mypy",
+    "mypy == 1.11.2",
     "pre-commit",
     "pyright",
     "ruff",
