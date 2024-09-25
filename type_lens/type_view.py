@@ -225,8 +225,8 @@ class TypeView(Generic[T]):
             return issubclass(self.origin, typ)
 
         if self.annotation is AnyStr:
-            return issubclass(str, typ) or issubclass(bytes, typ)
-        return self.annotation is not Any and not self.is_type_var and issubclass(self.annotation, typ)
+            return TypeView(Union[str, bytes]).is_subtype_of(typ)
+        return self.annotation is not Any and not self.is_type_var and self.is_subclass_of(typ)
 
     def is_subclass_of(self, typ: Any | tuple[Any, ...], /) -> bool:
         """Whether the annotation is a subclass of the given type.
