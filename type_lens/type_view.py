@@ -219,10 +219,10 @@ class TypeView(Generic[T]):
             Whether the annotation is a subtype of the given type(s).
         """
         if self.origin:
-            if self.origin in UNION_TYPES:
+            if self.is_union:
                 return all(t.is_subtype_of(typ) for t in self.inner_types)
 
-            return self.origin not in UNION_TYPES and issubclass(self.origin, typ)
+            return issubclass(self.origin, typ)
 
         if self.annotation is AnyStr:
             return issubclass(str, typ) or issubclass(bytes, typ)
