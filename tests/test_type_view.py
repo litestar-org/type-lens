@@ -331,6 +331,9 @@ def test_tuple() -> None:
     assert TypeView(Tuple[int, ...]).is_tuple is True
     assert TypeView(Tuple[int, ...]).is_variadic_tuple is True
 
+    assert TypeView(...).is_tuple is False
+    assert TypeView(...).is_variadic_tuple is False
+
 
 def test_strip_optional() -> None:
     # Non-optionals should return the original input

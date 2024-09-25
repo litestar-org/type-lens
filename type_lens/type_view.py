@@ -163,7 +163,7 @@ class TypeView(Generic[T]):
     @property
     def is_tuple(self) -> bool:
         """Whether the annotation is a ``tuple`` or not."""
-        return self.is_subtype_of(tuple)
+        return self.is_subclass_of(tuple)
 
     @property
     def is_type_var(self) -> bool:
