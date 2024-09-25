@@ -43,13 +43,13 @@ class TypeView(Generic[T]):
         unwrapped, metadata, wrappers = unwrap_annotation(annotation)
         origin = get_origin(unwrapped)
 
-        args = () if origin is abc.Callable else get_args(unwrapped)
+        args: tuple[Any, ...] = () if origin is abc.Callable else get_args(unwrapped)
 
         self.raw: Final[T] = annotation
         self.annotation: Final = unwrapped
         self.origin: Final = origin
         self.fallback_origin: Final = origin or unwrapped
-        self.args: Final = args
+        self.args: Final[tuple[Any, ...]] = args
         self.metadata: Final = metadata
         self._wrappers: Final = wrappers
         self.inner_types: Final = tuple(TypeView(arg) for arg in args)
