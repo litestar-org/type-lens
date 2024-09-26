@@ -104,9 +104,6 @@ omit = ["*/tests/*"]
 plugins = ["covdefaults"]
 source = ["type_lens"]
 
-[tool.coverage.report]
-fail-under = 100
-
 [tool.pytest.ini_options]
 addopts = "--strict-markers --strict-config"
 testpaths = ["tests"]
