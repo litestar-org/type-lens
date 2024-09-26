@@ -58,8 +58,7 @@ class ParameterView:
 
         Args:
             parameter: inspect.Parameter
-            fn_type_hints: mapping of names to types. Should be result of ``get_type_hints()``, preferably via the
-            :attr:``get_fn_type_hints() <.utils.signature_parsing.get_fn_type_hints>` helper.
+            fn_type_hints: mapping of names to types. Should be result of ``get_type_hints()``.
 
         Returns:
             ParsedSignatureParameter.
