@@ -37,7 +37,7 @@ classifiers = [
     "Intended Audience :: Developers",
 ]
 name = "type-lens"
-version = "0.1.0a1"
+version = "0.2.0"
 description = "type-lens is a Python template project designed to simplify the setup of a new project."
 readme = "README.md"
 license = { text = "MIT" }
