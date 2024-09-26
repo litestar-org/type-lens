@@ -43,13 +43,13 @@ class TypeView(Generic[T]):
         unwrapped, metadata, wrappers = unwrap_annotation(annotation)
         origin = get_origin(unwrapped)
 
-        args = () if origin is abc.Callable else get_args(unwrapped)
+        args: tuple[Any, ...] = () if origin is abc.Callable else get_args(unwrapped)
 
         self.raw: Final[T] = annotation
         self.annotation: Final = unwrapped
         self.origin: Final = origin
         self.fallback_origin: Final = origin or unwrapped
-        self.args: Final = args
+        self.args: Final[tuple[Any, ...]] = args
         self.metadata: Final = metadata
         self._wrappers: Final = wrappers
         self.inner_types: Final = tuple(TypeView(arg) for arg in args)
@@ -163,7 +163,7 @@ class TypeView(Generic[T]):
     @property
     def is_tuple(self) -> bool:
         """Whether the annotation is a ``tuple`` or not."""
-        return self.is_subtype_of(tuple)
+        return self.is_subclass_of(tuple)
 
     @property
     def is_type_var(self) -> bool:
@@ -219,14 +219,14 @@ class TypeView(Generic[T]):
             Whether the annotation is a subtype of the given type(s).
         """
         if self.origin:
-            if self.origin in UNION_TYPES:
+            if self.is_union:
                 return all(t.is_subtype_of(typ) for t in self.inner_types)
 
-            return self.origin not in UNION_TYPES and issubclass(self.origin, typ)
+            return issubclass(self.origin, typ)
 
         if self.annotation is AnyStr:
-            return issubclass(str, typ) or issubclass(bytes, typ)
-        return self.annotation is not Any and not self.is_type_var and issubclass(self.annotation, typ)
+            return TypeView(Union[str, bytes]).is_subtype_of(typ)
+        return self.annotation is not Any and not self.is_type_var and self.is_subclass_of(typ)
 
     def is_subclass_of(self, typ: Any | tuple[Any, ...], /) -> bool:
         """Whether the annotation is a subclass of the given type.

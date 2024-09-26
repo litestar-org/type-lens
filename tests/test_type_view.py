@@ -277,6 +277,7 @@ def test_parsed_type_is_subtype_of() -> None:
 
     assert TypeView(Foo).is_subtype_of(Foo) is True
     assert TypeView(Bar).is_subtype_of(Foo) is True
+    assert TypeView(Union[bool, int]).is_subtype_of(int) is True
 
 
 def test_is_subclass_of() -> None:
@@ -293,7 +294,7 @@ def test_is_subclass_of() -> None:
     assert TypeView(Optional[int]).is_subclass_of(int) is False
     assert TypeView(None).is_subclass_of(int) is False
     assert TypeView(Literal[1]).is_subclass_of(int) is False
-    assert TypeView(Union[bool, int]).is_subclass_of(int) is False
+    assert TypeView(Union[float, str]).is_subclass_of(int) is False
 
     assert TypeView(bool).is_subclass_of(bool) is True
     assert TypeView(List[int]).is_subclass_of(list) is True
@@ -330,6 +331,9 @@ def test_tuple() -> None:
 
     assert TypeView(Tuple[int, ...]).is_tuple is True
     assert TypeView(Tuple[int, ...]).is_variadic_tuple is True
+
+    assert TypeView(...).is_tuple is False
+    assert TypeView(...).is_variadic_tuple is False
 
 
 def test_strip_optional() -> None:
