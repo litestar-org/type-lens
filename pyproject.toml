@@ -43,7 +43,8 @@ readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.8,<4.0"
 dependencies = [
-  "eval-type-backport; python_version<'3.10'"
+  "eval-type-backport; python_version<'3.10'",
+  "typing-extensions >= 4.1.0",
 ]
 
 [project.urls]
