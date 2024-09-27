@@ -274,8 +274,9 @@ def test_parsed_type_is_subtype_of() -> None:
     assert TypeView(List[int]).is_subtype_of(list) is True
     assert TypeView(List[int]).is_subtype_of(int) is False
     assert TypeView(Optional[int]).is_subtype_of(int) is False
-    assert TypeView(Union[bool, int]).is_subtype_of(int) is True
+    assert TypeView(Literal["one"]).is_subtype_of(set) is False
 
+    assert TypeView(Union[bool, int]).is_subtype_of(int) is True
     assert TypeView(Foo).is_subtype_of(Foo) is True
     assert TypeView(Bar).is_subtype_of(Foo) is True
     assert TypeView(Union[bool, int]).is_subtype_of(int) is True

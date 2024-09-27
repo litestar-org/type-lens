@@ -232,7 +232,7 @@ class TypeView(Generic[T]):
             if self.is_union:
                 return all(t.is_subtype_of(typ) for t in self.inner_types)
 
-            return issubclass(self.origin, typ)
+            return self.is_subclass_of(typ)
 
         if self.annotation is AnyStr:
             return TypeView(Union[str, bytes]).is_subtype_of(typ)
