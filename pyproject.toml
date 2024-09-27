@@ -9,7 +9,8 @@ maintainers = [
     { name = "Janek Nouvertné", email = "provinzkraut@litestar.dev" },
     { name = "Peter Schutt", email = "peter@litestar.dev" },
     { name = "Visakh Unnikrishnan", email = "guacs@litestar.dev" },
-    { name = "Alc", email = "alc@litestar.dev" }
+    { name = "Alc", email = "alc@litestar.dev" },
+    { name = "Dan Cardin", email = "ddcardin@gmail.com" },
 ]
 keywords = [
     "programming",
@@ -37,7 +38,7 @@ classifiers = [
     "Intended Audience :: Developers",
 ]
 name = "type-lens"
-version = "0.2.0"
+version = "0.2.1"
 description = "type-lens is a Python template project designed to simplify the setup of a new project."
 readme = "README.md"
 license = { text = "MIT" }
@@ -103,9 +104,6 @@ skip = 'pdm.lock'
 omit = ["*/tests/*"]
 plugins = ["covdefaults"]
 source = ["type_lens"]
-
-[tool.coverage.report]
-fail-under = 100
 
 [tool.pytest.ini_options]
 addopts = "--strict-markers --strict-config"

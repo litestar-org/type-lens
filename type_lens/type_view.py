@@ -2,9 +2,10 @@ from __future__ import annotations
 
 from collections import abc
 from collections.abc import Collection, Mapping
-from typing import Any, AnyStr, Final, ForwardRef, Generic, Literal, TypeVar, Union
+from typing import Any, AnyStr, Final, ForwardRef, Generic, Literal, TypeVar, Union, _SpecialForm
 
 from typing_extensions import Annotated, NotRequired, Required, get_args, get_origin
+from typing_extensions import Literal as ExtensionsLiteral
 
 from type_lens.types.builtins import UNION_TYPES, NoneType
 from type_lens.utils import INSTANTIABLE_TYPE_MAPPING, SAFE_GENERIC_ORIGIN_MAP, unwrap_annotation
@@ -71,13 +72,22 @@ class TypeView(Generic[T]):
 
     @property
     def repr_type(self) -> str:
-        if isinstance(self.annotation, type) or self.origin:
-            if self.is_literal:
-                name = "Literal"
-            elif self.is_union:
-                name = "Union"
-            else:
-                name = self.annotation.__name__
+        """Returns a consistent, canonical repr of the contained annotation.
+
+        Removes preceding `typing.` prefix for built-in typing constructs. Python's
+        native repr for `typing` types is inconsistent across python versions!
+        """
+        # Literal/Union both appear to have no name on some versions of python.
+        if self.is_literal:
+            name = "Literal"
+        elif self.is_union:
+            name = "Union"
+        elif isinstance(self.annotation, (type, _SpecialForm)) or self.origin:
+            try:
+                name = self.annotation.__name__  # pyright: ignore[reportAttributeAccessIssue]
+            except AttributeError:
+                # Certain _SpecialForm items have no __name__ python 3.8.
+                name = self.annotation._name  # pyright: ignore[reportAttributeAccessIssue]
         else:
             name = repr(self.annotation)
 
@@ -128,7 +138,7 @@ class TypeView(Generic[T]):
     @property
     def is_literal(self) -> bool:
         """Whether the annotation is a literal value or not."""
-        return self.origin is Literal
+        return self.origin in {Literal, ExtensionsLiteral}
 
     @property
     def is_mapping(self) -> bool:

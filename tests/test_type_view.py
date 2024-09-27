@@ -19,6 +19,7 @@ from typing import (
 
 import pytest
 from typing_extensions import Annotated, NotRequired, Required, get_type_hints
+from typing_extensions import Literal as ExtensionsLiteral
 
 from type_lens import TypeView
 from type_lens.types.builtins import NoneType
@@ -349,6 +350,9 @@ def test_repr() -> None:
     assert repr(TypeView(int)) == "TypeView(int)"
     assert repr(TypeView(Optional[str])) == "TypeView(Union[str, NoneType])"
     assert repr(TypeView(Literal["1", 2, True])) == "TypeView(Literal['1', 2, True])"
+    assert repr(TypeView(Tuple[Literal["1"], int])) == "TypeView(Tuple[Literal['1'], int])"
+    assert repr(TypeView(ExtensionsLiteral["1", 2, True])) == "TypeView(Literal['1', 2, True])"
+    assert repr(TypeView(Any)) == "TypeView(Any)"
 
 
 def test_is_none_type() -> None:
