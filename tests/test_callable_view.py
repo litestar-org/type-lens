@@ -47,7 +47,7 @@ def test_untyped_param() -> None:
         return foo
 
     function_view = CallableView.from_callable(fn)
-    assert function_view.parameters == (ParameterView("foo", TypeView(Any)),)
+    assert function_view.parameters == (ParameterView("foo", TypeView(Any), has_annotation=False),)
 
 
 def test_typed_param() -> None:
