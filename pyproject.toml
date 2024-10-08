@@ -98,7 +98,7 @@ requires = ["hatchling"]
 
 [tool.codespell]
 ignore-words-list = "te"
-skip = 'pdm.lock'
+skip = 'uv.lock'
 
 [tool.coverage.run]
 omit = ["*/tests/*"]
