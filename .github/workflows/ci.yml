@@ -18,8 +18,11 @@ jobs:
       - name: Set up Python
         run: uv python install 3.8
 
-      - name: Install Pre-Commit
-        run: uv pip install pre-commit && pre-commit install
+      - name: Create virtual environment
+        run: uv sync --all-extras --dev
+
+      - name: Install Pre-Commit hooks
+        run: pre-commit install
 
       - name: Load cached Pre-Commit Dependencies
         id: cached-pre-commit-dependencies
