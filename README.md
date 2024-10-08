@@ -25,7 +25,7 @@
 
 ## Usage
 
-- Install `type-lens` with `pip` or check out [our installation guide][install-guide]
+- Install `type-lens` with `pip`
 
 ```shell
 pip install type-lens

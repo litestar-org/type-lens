@@ -5,11 +5,11 @@ SHELL := /bin/bash
 
 .DEFAULT_GOAL:=help
 .ONESHELL:
-USING_PDM		=	$(shell grep "tool.pdm" pyproject.toml && echo "yes")
+USING_UV		=	$(shell grep "tool.uv" pyproject.toml && echo "yes")
 ENV_PREFIX		=  .venv/bin/
 VENV_EXISTS		=	$(shell python3 -c "if __import__('pathlib').Path('.venv/bin/activate').exists(): print('yes')")
-PDM_OPTS 		?=
-PDM 			?= 	pdm $(PDM_OPTS)
+uv_OPTS 		?=
+uv 			    ?= 	uv $(uv_OPTS)
 
 .EXPORT_ALL_VARIABLES:
 
@@ -21,29 +21,26 @@ help: 		   										## Display this help text for Makefile
 .PHONY: upgrade
 upgrade:       										## Upgrade all dependencies to the latest stable versions
 	@echo "=> Updating all dependencies"
-	@if [ "$(USING_PDM)" ]; then $(PDM) update; fi
+	@if [ "$(USING_UV)" ]; then $(uv) lock --upgrade; fi
 	@echo "=> Dependencies Updated"
-	@$(PDM) run pre-commit autoupdate
+	@$(uv) run pre-commit autoupdate
 	@echo "=> Updated Pre-commit"
 
 # =============================================================================
 # Developer Utils
 # =============================================================================
-.PHONY: install-pdm
-install-pdm: 										## Install latest version of PDM
-	@curl -sSLO https://pdm.fming.dev/install-pdm.py && \
-	curl -sSL https://pdm.fming.dev/install-pdm.py.sha256 | shasum -a 256 -c - && \
-	python3 install-pdm.py && \
-	rm install-pdm.py
+.PHONY: install-uv
+install-uv: 										## Install latest version of uv
+	@curl -LsSf https://astral.sh/uv/install.sh | sh
 
 .PHONY: install
 install: clean										## Install the project, dependencies, and pre-commit for local development
-	@if ! $(PDM) --version > /dev/null; then echo '=> Installing PDM'; $(MAKE) install-pdm; fi
+	@if ! $(uv) --version > /dev/null; then echo '=> Installing uv'; $(MAKE) install-uv; fi
 	@if [ "$(VENV_EXISTS)" ]; then echo "=> Removing existing virtual environment"; fi
 	if [ "$(VENV_EXISTS)" ]; then $(MAKE) destroy; fi
 	if [ "$(VENV_EXISTS)" ]; then $(MAKE) clean; fi
-	@if [ "$(USING_PDM)" ]; then $(PDM) config --local venv.in_project true && python3 -m venv --copies .venv && . $(ENV_PREFIX)/activate && $(ENV_PREFIX)/pip install --quiet -U wheel setuptools cython mypy pip; fi
-	@if [ "$(USING_PDM)" ]; then $(PDM) install -dG:all; fi
+	@if [ "$(USING_UV)" ]; then python3 -m venv --copies .venv && . $(ENV_PREFIX)/activate && $(ENV_PREFIX)/pip install --quiet -U wheel setuptools cython mypy pip; fi
+	@if [ "$(USING_UV)" ]; then $(uv) sync; fi
 	@echo "=> Install complete! Note: If you want to re-install re-run 'make install'"
 
 .PHONY: clean
@@ -64,13 +61,9 @@ clean: 												## Cleanup temporary build artifacts
 destroy: 											## Destroy the virtual environment
 	@rm -rf .venv
 
-.PHONY: refresh-lockfiles
-refresh-lockfiles:                                 ## Sync lockfiles with requirements files.
-	pdm update --update-reuse --group :all
-
 .PHONY: lock
 lock:                                             ## Rebuild lockfiles from scratch, updating all dependencies
-	pdm update --update-eager --group :all
+	@uv lock --upgrade
 
 # =============================================================================
 # Tests, Linting, Coverage
@@ -78,19 +71,19 @@ lock:                                             ## Rebuild lockfiles from scra
 .PHONY: mypy
 mypy:                                               ## Run mypy
 	@echo "=> Running mypy"
-	@$(PDM) run dmypy run
+	@$(uv) run dmypy run
 	@echo "=> mypy complete"
 
 .PHONY: mypy-nocache
 mypy-nocache:                                       ## Run Mypy without cache
 	@echo "=> Running mypy without a cache"
-	@$(PDM) run mypy
+	@$(uv) run mypy
 	@echo "=> mypy complete"
 
 .PHONY: pyright
 pyright:                                            ## Run pyright
 	@echo "=> Running pyright"
-	@$(PDM) run pyright
+	@$(uv) run pyright
 	@echo "=> pyright complete"
 
 .PHONY: type-check
@@ -99,13 +92,13 @@ type-check: mypy pyright                            ## Run all type checking
 .PHONY: pre-commit
 pre-commit: 										## Runs pre-commit hooks; includes ruff formatting and linting, codespell
 	@echo "=> Running pre-commit process"
-	@$(PDM) run pre-commit run --all-files
+	@$(uv) run pre-commit run --all-files
 	@echo "=> Pre-commit complete"
 
 .PHONY: slotscheck
 slotscheck: 										## Run slotscheck
 	@echo "=> Running slotscheck"
-	@$(PDM) run slotscheck type_lens/
+	@$(uv) run slotscheck type_lens/
 	@echo "=> slotscheck complete"
 
 .PHONY: lint
@@ -114,20 +107,20 @@ lint: pre-commit type-check slotscheck						## Run all linting
 .PHONY: coverage
 coverage:  											## Run the tests and generate coverage report
 	@echo "=> Running tests with coverage"
-	@$(PDM) run pytest tests --cov -n auto
-	@$(PDM) run coverage html
-	@$(PDM) run coverage xml
+	@$(uv) run pytest tests --cov -n auto
+	@$(uv) run coverage html
+	@$(uv) run coverage xml
 	@echo "=> Coverage report generated"
 
 .PHONY: test
 test:  												## Run the tests
 	@echo "=> Running test cases"
-	@$(PDM) run pytest tests
+	@$(uv) run pytest tests
 	@echo "=> Tests complete"
 
 .PHONY: test-examples
 test-examples:            			              	## Run the examples tests
-	@$(PDM) run pytest docs/examples
+	@$(uv) run pytest docs/examples
 
 .PHONY: test-all
 test-all: test test-examples 						## Run all tests
@@ -139,12 +132,6 @@ check-all: lint test-all coverage                   ## Run all linting, tests, a
 # =============================================================================
 # Docs
 # =============================================================================
-.PHONY: docs-install
-docs-install: 										## Install docs dependencies
-	@echo "=> Installing documentation dependencies"
-	@$(PDM) install --group docs
-	@echo "=> Installed documentation dependencies"
-
 docs-clean: 										## Dump the existing built docs
 	@echo "=> Cleaning documentation build assets"
 	@rm -rf docs/_build
@@ -152,16 +139,16 @@ docs-clean: 										## Dump the existing built docs
 
 docs-serve: docs-clean 								## Serve the docs locally
 	@echo "=> Serving documentation"
-	$(PDM) run sphinx-autobuild docs docs/_build/ -j auto --watch type_lens --watch docs --watch tests --watch CONTRIBUTING.rst --port 8002
+	$(uv) run sphinx-autobuild docs docs/_build/ -j auto --watch type_lens --watch docs --watch tests --watch CONTRIBUTING.rst --port 8002
 
 docs: docs-clean 									## Dump the existing built docs and rebuild them
 	@echo "=> Building documentation"
-	@$(PDM) run sphinx-build -M html docs docs/_build/ -E -a -j auto -W --keep-going
+	@$(uv) run sphinx-build -M html docs docs/_build/ -E -a -j auto -W --keep-going
 
 .PHONY: docs-linkcheck
 docs-linkcheck: 									## Run the link check on the docs
-	@$(PDM) run sphinx-build -b linkcheck ./docs ./docs/_build -D linkcheck_ignore='http://.*','https://.*'
+	@$(uv) run sphinx-build -b linkcheck ./docs ./docs/_build -D linkcheck_ignore='http://.*','https://.*'
 
 .PHONY: docs-linkcheck-full
 docs-linkcheck-full: 									## Run the full link check on the docs
-	@$(PDM) run sphinx-build -b linkcheck ./docs ./docs/_build -D linkcheck_anchors=0
+	@$(uv) run sphinx-build -b linkcheck ./docs ./docs/_build -D linkcheck_anchors=0

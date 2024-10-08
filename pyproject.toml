@@ -13,7 +13,7 @@ maintainers = [
     { name = "Dan Cardin", email = "ddcardin@gmail.com" },
 ]
 keywords = [
-    "programming",
+    "typing",
     "developer",
     "tools",
     "litestar-org",
@@ -57,8 +57,9 @@ homepage = "https://litestar.dev/"
 repository = "https://github.com/litestar-org/type-lens"
 documentation = "https://docs.type-lens.litestar.dev/"
 
-[tool.pdm.dev-dependencies]
-docs = [
+[tool.uv]
+dev-dependencies = [
+    # - Documentation
     "auto-pytabs[sphinx]>=0.4.0",
     "sphinx-autobuild>=2021.3.14",
     "sphinx-click>=4.4.0",
@@ -71,21 +72,20 @@ docs = [
     "sphinx-togglebutton>=0.3.2",
     #    "litestar-sphinx-theme @ {root:uri}/../litestar-sphinx-theme", # only needed when working on the theme
     "litestar-sphinx-theme @ git+https://github.com/litestar-org/litestar-sphinx-theme.git@v3",
-]
-lint = [
+    # - Linting
     "codecov-cli",
     "mypy == 1.11.2",
     "pre-commit",
     "pyright",
     "ruff",
     "slotscheck",
-]
-test = [
+    # - Testing
     "covdefaults",
     "pytest",
     "pytest-cov",
 ]
 
+# TODO: needs migrating. Poe?
 [tool.pdm.scripts]
 ci = { composite = ["lint", "test"] }
 docs-serve = "sphinx-autobuild docs docs/_build/ -j auto --watch dtos --watch docs --watch tests --port 8002"
