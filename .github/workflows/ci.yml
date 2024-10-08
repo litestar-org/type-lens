@@ -22,7 +22,7 @@ jobs:
         run: uv sync --all-extras --dev
 
       - name: Install Pre-Commit hooks
-        run: pre-commit install
+        run: uv run pre-commit install
 
       - name: Load cached Pre-Commit Dependencies
         id: cached-pre-commit-dependencies
