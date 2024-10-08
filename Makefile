@@ -40,7 +40,7 @@ install: clean										## Install the project, dependencies, and pre-commit for
 	if [ "$(VENV_EXISTS)" ]; then $(MAKE) destroy; fi
 	if [ "$(VENV_EXISTS)" ]; then $(MAKE) clean; fi
 	@if [ "$(USING_UV)" ]; then python3 -m venv --copies .venv && . $(ENV_PREFIX)/activate && $(ENV_PREFIX)/pip install --quiet -U wheel setuptools cython mypy pip; fi
-	@if [ "$(USING_UV)" ]; then $(uv) sync; fi
+	@if [ "$(USING_UV)" ]; then $(uv) sync --all-extras --dev; fi
 	@echo "=> Install complete! Note: If you want to re-install re-run 'make install'"
 
 .PHONY: clean
