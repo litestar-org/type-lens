@@ -81,7 +81,7 @@ auto_pytabs_compat_mode = True
 
 # -- Style configuration -----------------------------------------------------
 html_theme = "litestar_sphinx_theme"
-html_title = "Litestar Framework"
+html_title = "Type Lens"
 pygments_style = "lightbulb"
 todo_include_todos = True
 
