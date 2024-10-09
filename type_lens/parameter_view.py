@@ -60,6 +60,7 @@ class ParameterView:
             repr(self.name),
             repr(self.type_view) if self.type_view else None,
             f"default={self.default}" if self.default is not Empty else None,
+            f"type_view={self.type_view}" if self.has_annotation else None,
         ]
         args_str = ", ".join(a for a in args if a is not None)
         return f"{cls_name}({args_str})"

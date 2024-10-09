@@ -1,4 +1,5 @@
 from __future__ import annotations
+import enum
 
 import sys
 from dataclasses import dataclass
@@ -143,3 +144,18 @@ def test_evaluated_runtime_type() -> None:
         assert fn_view1.parameters == (ParameterView("a", TypeView(Union[List[int], None]), default=None),)  # pyright: ignore
     else:
         assert fn_view1.parameters == (ParameterView("a", TypeView(Union[list[int], None]), default=None),)  # pyright: ignore
+
+
+def test_enum_signature() -> None:
+    class Foo(enum.Enum):
+        a = 'asdf'
+        b = 'qwer'
+
+    view = CallableView.from_callable(Foo)
+
+    assert view == CallableView(Foo, {})
+    assert view.return_type == TypeView(None)
+    assert view.parameters == (
+        ParameterView('cls', TypeView(Any), has_annotation=False),
+        ParameterView('value', TypeView(Any), has_annotation=False),
+    )

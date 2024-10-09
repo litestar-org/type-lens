@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import enum
 import inspect
 import types
 from typing import TYPE_CHECKING, Any, Callable
@@ -18,7 +19,18 @@ if TYPE_CHECKING:
 class CallableView:
     def __init__(self, fn: Callable, type_hints: dict[str, type]):
         self.callable = fn
-        self.signature = getattr(fn, "__signature__", None) or inspect.signature(fn)
+
+        signature = getattr(fn, "__signature__", None)
+
+        if isinstance(fn, type) and issubclass(fn, enum.Enum):
+            signature = None
+            fn = fn.__new__
+
+        if signature is None:
+            signature = inspect.signature(fn)
+
+        self.signature = signature
+
 
         return_annotation = type_hints.pop("return", None)
         self.return_type = TypeView(return_annotation)
