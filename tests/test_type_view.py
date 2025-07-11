@@ -31,7 +31,7 @@ if TYPE_CHECKING:
 T = TypeVar("T")
 
 
-def _check_parsed_type(type_lens: TypeView, expected: dict[str, Any]) -> None:
+def _check_parsed_type(type_lens: TypeView[Any], expected: dict[str, Any]) -> None:
     __tracebackhide__ = True
     for key, expected_value in expected.items():
         lens_value = getattr(type_lens, key)
@@ -334,8 +334,8 @@ def test_tuple() -> None:
     assert TypeView(Tuple[int, ...]).is_tuple is True
     assert TypeView(Tuple[int, ...]).is_variadic_tuple is True
 
-    assert TypeView(...).is_tuple is False
-    assert TypeView(...).is_variadic_tuple is False
+    assert TypeView(...).is_tuple is False  # pyright: ignore
+    assert TypeView(...).is_variadic_tuple is False  # pyright: ignore
 
 
 def test_strip_optional() -> None:

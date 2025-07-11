@@ -2,7 +2,17 @@ from __future__ import annotations
 
 from collections import abc
 from collections.abc import Collection, Mapping
-from typing import Any, AnyStr, Final, ForwardRef, Generic, Literal, TypeVar, Union, _SpecialForm
+from typing import (
+    Any,
+    AnyStr,
+    Final,
+    ForwardRef,
+    Generic,
+    Literal,
+    TypeVar,
+    Union,
+    _SpecialForm,  # pyright: ignore[reportPrivateUsage]
+)
 
 from typing_extensions import Annotated, NotRequired, Required, get_args, get_origin
 from typing_extensions import Literal as ExtensionsLiteral
@@ -44,12 +54,12 @@ class TypeView(Generic[T]):
         unwrapped, metadata, wrappers = unwrap_annotation(annotation)
         origin = get_origin(unwrapped)
 
-        args: tuple[Any, ...] = () if origin is abc.Callable else get_args(unwrapped)
+        args: tuple[Any, ...] = () if origin is abc.Callable else get_args(unwrapped)  # pyright: ignore
 
         self.raw: Final[T] = annotation
         self.annotation: Final = unwrapped
-        self.origin: Final = origin
-        self.fallback_origin: Final = origin or unwrapped
+        self.origin: Final[Any] = origin
+        self.fallback_origin: Final[Any] = origin or unwrapped
         self.args: Final[tuple[Any, ...]] = args
         self.metadata: Final = metadata
         self._wrappers: Final = wrappers
@@ -79,15 +89,15 @@ class TypeView(Generic[T]):
         """
         # Literal/Union both appear to have no name on some versions of python.
         if self.is_literal:
-            name = "Literal"
+            name: str = "Literal"
         elif self.is_union:
             name = "Union"
         elif isinstance(self.annotation, (type, _SpecialForm)) or self.origin:
             try:
-                name = self.annotation.__name__  # pyright: ignore[reportAttributeAccessIssue]
+                name = str(self.annotation.__name__)  # pyright: ignore
             except AttributeError:
                 # Certain _SpecialForm items have no __name__ python 3.8.
-                name = self.annotation._name  # pyright: ignore[reportAttributeAccessIssue]
+                name = str(self.annotation._name)  # pyright: ignore
         else:
             name = repr(self.annotation)
 
@@ -95,7 +105,7 @@ class TypeView(Generic[T]):
             inner_types = ", ".join(t.repr_type for t in self.inner_types)
             name = f"{name}[{inner_types}]"
 
-        return str(name)
+        return name
 
     @property
     def allows_none(self) -> bool:
@@ -192,7 +202,7 @@ class TypeView(Generic[T]):
         Tuples like `tuple[int, ...]` represent a list-like unbounded sequence
         of a single type T.
         """
-        return self.is_tuple and len(self.args) == 2 and self.args[1] == ...
+        return self.is_tuple and len(self.args) == 2 and self.args[1] == ...  # pyright: ignore
 
     @property
     def safe_generic_origin(self) -> Any:
@@ -249,7 +259,7 @@ class TypeView(Generic[T]):
         """
         return isinstance(self.fallback_origin, type) and issubclass(self.fallback_origin, typ)
 
-    def strip_optional(self) -> TypeView:
+    def strip_optional(self) -> TypeView[Any]:
         if not self.is_optional:
             return self
 
