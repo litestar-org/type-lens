@@ -32,7 +32,7 @@ class ParameterView:
     def __init__(
         self,
         name: str,
-        type_view: TypeView = _any_type_view,
+        type_view: TypeView[Any] = _any_type_view,
         *,
         default: Any | EmptyType = Empty,
         has_annotation: bool = True,

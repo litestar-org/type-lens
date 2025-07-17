@@ -44,9 +44,9 @@ def test_return_annotation() -> None:
 
 def test_untyped_param() -> None:
     def fn(foo):  # type: ignore[no-untyped-def]
-        return foo
+        return foo  # pyright: ignore
 
-    function_view = CallableView.from_callable(fn)
+    function_view = CallableView.from_callable(fn)  # pyright: ignore
     assert function_view.parameters == (ParameterView("foo", TypeView(Any), has_annotation=False),)
 
 
@@ -127,7 +127,7 @@ def test_instance_method() -> None:
 def test_parameters_with_none_default(hint: Any) -> None:
     def fn(plain: hint = None, annotated: Annotated[hint, ...] = None) -> None: ...  # pyright: ignore
 
-    fn_view = CallableView.from_callable(fn, localns=locals(), include_extras=True)
+    fn_view = CallableView.from_callable(fn, localns=locals(), include_extras=True)  # pyright: ignore
     plain_param, annotated_param = fn_view.parameters
     assert plain_param.type_view.annotation == annotated_param.type_view.annotation
 

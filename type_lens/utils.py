@@ -94,8 +94,8 @@ def unwrap_annotation(annotation: t.Any) -> tuple[t.Any, tuple[t.Any, ...], set[
         A tuple of the unwrapped annotation and any ``Annotated`` metadata, and a set of any wrapper types encountered.
     """
     origin = te.get_origin(annotation)
-    wrappers = set()
-    metadata = []
+    wrappers: set[t.Any] = set()
+    metadata: list[t.Any] = []
     while origin in _WRAPPER_TYPES:
         wrappers.add(origin)
         annotation, *meta = te.get_args(annotation)

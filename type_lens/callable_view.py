@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 class CallableView:
-    def __init__(self, fn: Callable, type_hints: dict[str, type]):
+    def __init__(self, fn: Callable[..., Any], type_hints: dict[str, type]):
         self.callable = fn
         self.signature = getattr(fn, "__signature__", None) or inspect.signature(fn)
 
@@ -45,7 +45,7 @@ class CallableView:
     @classmethod
     def from_callable(
         cls: type[Self],
-        fn: Callable,
+        fn: Callable[..., Any],
         *,
         globalns: dict[str, Any] | None = None,
         localns: dict[str, Any] | None = None,
@@ -61,17 +61,3 @@ class CallableView:
 
         result = get_type_hints(hint_fn, globalns=globalns, localns=localns, include_extras=include_extras)
         return cls(fn, result)
-
-
-def _fix_annotated_optional_type_hints(
-    hints: dict[str, Any],
-) -> dict[str, Any]:  # pragma: no cover
-    """Normalize `Annotated` interacting with `get_type_hints` in versions <3.11.
-
-    https://github.com/python/cpython/issues/90353.
-    """
-    for param_name, hint in hints.items():
-        type_view = TypeView(hint)
-        if type_view.is_union and type_view.inner_types[0].is_annotated:
-            hints[param_name] = type_view.inner_types[0].raw
-    return hints
