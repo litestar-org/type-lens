@@ -7,9 +7,7 @@ on:
 
 jobs:
   deploy:
-
     if: ${{ github.event.workflow_run.conclusion == 'success' &&  github.event.workflow_run.event == 'pull_request' }}
-
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -23,9 +21,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v6
         with:
           workflow_conclusion: success
-
           run_id: ${{ github.event.workflow_run.id }}
-
           path: docs-preview
           name: docs-preview
 
@@ -42,21 +38,15 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: docs-preview/docs/_build/html
-
-          ssh-key: ${{ secrets.DOCS_PREVIEW_DEPLOY_KEY }}
-
+          token: ${{ secrets.DOCS_PREVIEW_DEPLOY_KEY }}
           repository-name: litestar-org/type-lens-docs-preview
           clean: false
-
           target-folder: ${{ env.PR_NUMBER }}
-
           branch: gh-pages
 
-      - uses: actions/github-script@v6
+      - uses: actions/github-script@v7
         env:
-
           PR_NUMBER: ${{ env.PR_NUMBER }}
-
         with:
           script: |
             const issue_number = process.env.PR_NUMBER

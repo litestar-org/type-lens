@@ -1,17 +1,13 @@
 # folders
-__pycache__/
 .auto_pytabs_cache/
 .hypothesis/
-.idea/
 .mypy_cache/
 .pytest_cache/
 .scannerwork/
 .venv/
-.vscode/
 *.egg-info/
 build/
 dist/
-node_modules/
 results/
 site/
 target/
@@ -21,7 +17,6 @@ target/
 **/*.sqlite
 **/*.sqlite*
 *.iml
-.DS_Store
 .coverage
 .dmypy.json
 .python-version
@@ -29,8 +24,3 @@ target/
 /docs/_build/
 coverage.*
 setup.py
-
-# pdm
-.pdm.toml
-.pdm-python
-.pdm-build/
