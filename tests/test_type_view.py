@@ -426,3 +426,37 @@ def test_fallback_origin() -> None:
 
     if sys.version_info >= (3, 9):
         assert TypeView(set[bool]).fallback_origin == set
+
+
+@pytest.mark.skipif(sys.version_info < (3, 12), reason="Requires Python 3.12 or higher for TypeAliasType")
+def test_is_type_alias() -> None:
+    from typing import TypeAliasType  # type: ignore[attr-defined]
+
+    Foo = TypeAliasType("Foo", int)  # pyright: ignore
+    assert TypeView(Foo).is_type_alias is True  # pyright: ignore
+    assert TypeView(int).is_type_alias is False
+
+
+def test_is_type_alias_extensions() -> None:
+    from typing_extensions import TypeAliasType
+
+    Foo = TypeAliasType("Foo", int)  # pyright: ignore
+    assert TypeView(Foo).is_type_alias is True
+    assert TypeView(int).is_type_alias is False
+
+
+@pytest.mark.skipif(sys.version_info < (3, 12), reason="Requires Python 3.12 or higher for TypeAliasType")
+def test_strip_type_alias() -> None:
+    from typing import TypeAliasType  # type: ignore[attr-defined]
+
+    Foo = TypeAliasType("Foo", int)  # pyright: ignore
+    assert TypeView(Foo).strip_type_alias() == TypeView(int)  # pyright: ignore
+    assert TypeView(int).strip_type_alias() == TypeView(int)
+
+
+def test_strip_type_alias_extensions() -> None:
+    from typing_extensions import TypeAliasType
+
+    Foo = TypeAliasType("Foo", int)  # pyright: ignore
+    assert TypeView(Foo).strip_type_alias() == TypeView(int)
+    assert TypeView(int).strip_type_alias() == TypeView(int)

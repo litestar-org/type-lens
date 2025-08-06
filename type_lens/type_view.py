@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import sys
+import typing
 from collections import abc
 from collections.abc import Collection, Mapping
 from typing import (
@@ -14,6 +16,7 @@ from typing import (
     _SpecialForm,  # pyright: ignore[reportPrivateUsage]
 )
 
+import typing_extensions
 from typing_extensions import Annotated, NotRequired, Required, get_args, get_origin
 from typing_extensions import Literal as ExtensionsLiteral
 
@@ -204,6 +207,19 @@ class TypeView(Generic[T]):
         """
         return self.is_tuple and len(self.args) == 2 and self.args[1] == ...  # pyright: ignore
 
+    if sys.version_info < (3, 12):
+
+        @property
+        def is_type_alias(self) -> bool:
+            """Whether the annotation is a new-style `type Type = ...` alias or not."""
+            return _is_typing_extensins_type_alias(self)
+    else:
+
+        @property
+        def is_type_alias(self) -> bool:
+            """Whether the annotation is a new-style `type Type = ...` alias or not."""
+            return isinstance(self.annotation, typing.TypeAliasType) or _is_typing_extensins_type_alias(self)
+
     @property
     def safe_generic_origin(self) -> Any:
         """A type, safe to be used as a generic type across all supported Python versions.
@@ -260,6 +276,7 @@ class TypeView(Generic[T]):
         return isinstance(self.fallback_origin, type) and issubclass(self.fallback_origin, typ)
 
     def strip_optional(self) -> TypeView[Any]:
+        """Remove the "Optional" component of an `Optional[T]` or `Union[T, None]` type."""
         if not self.is_optional:
             return self
 
@@ -269,3 +286,21 @@ class TypeView(Generic[T]):
         args = tuple(a for a in self.args if a is not NoneType)
         non_optional = Union[args]  # type: ignore[valid-type]
         return TypeView(non_optional)
+
+    def strip_type_alias(self) -> TypeView[Any]:
+        """Remove the type alias from a `type Type = T` type alias.
+
+        Examples:
+            >>> type Foo = int
+            >>> TypeAlias(Foo).strip_type_alias()
+            TypeView(int)
+        """
+        if not self.is_type_alias:
+            return self
+        return TypeView(self.annotation.__value__)
+
+
+def _is_typing_extensins_type_alias(type_view: TypeView[Any]) -> bool:
+    if hasattr(typing_extensions, "TypeAliasType"):
+        return isinstance(type_view.annotation, typing_extensions.TypeAliasType)
+    return False
