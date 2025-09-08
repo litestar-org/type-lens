@@ -11,6 +11,7 @@ from typing import (
     ForwardRef,
     Generic,
     Literal,
+    Sequence,
     TypeVar,
     Union,
     _SpecialForm,  # pyright: ignore[reportPrivateUsage]
@@ -43,18 +44,19 @@ class TypeView(Generic[T]):
         "_wrappers": "A set of wrapper types that were removed from the annotation.",
     }
 
-    def __init__(self, annotation: T) -> None:
+    def __init__(self, annotation: T, *, metadata: Sequence[Any] = ()) -> None:
         """Initialize ParsedType.
 
         Args:
             annotation: The type annotation. This should be extracted from the return of
                 ``get_type_hints(..., include_extras=True)`` so that forward references are resolved and recursive
                 ``Annotated`` types are flattened.
+            metadata: Additional metadata to associate with the annotation.
 
         Returns:
             ParsedType
         """
-        unwrapped, metadata, wrappers = unwrap_annotation(annotation)
+        unwrapped, annotation_metadata, wrappers = unwrap_annotation(annotation)
         origin = get_origin(unwrapped)
 
         args: tuple[Any, ...] = () if origin is abc.Callable else get_args(unwrapped)  # pyright: ignore
@@ -64,9 +66,9 @@ class TypeView(Generic[T]):
         self.origin: Final[Any] = origin
         self.fallback_origin: Final[Any] = origin or unwrapped
         self.args: Final[tuple[Any, ...]] = args
-        self.metadata: Final = metadata
+        self.metadata: Final = (*annotation_metadata, *metadata)
         self._wrappers: Final = wrappers
-        self.inner_types: Final = tuple(TypeView(arg) for arg in args)
+        self.inner_types: Final = tuple(TypeView(arg, metadata=self.metadata) for arg in args)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, TypeView):
@@ -285,7 +287,7 @@ class TypeView(Generic[T]):
 
         args = tuple(a for a in self.args if a is not NoneType)
         non_optional = Union[args]  # type: ignore[valid-type]
-        return TypeView(non_optional)
+        return TypeView(non_optional, metadata=self.metadata)
 
     def strip_type_alias(self) -> TypeView[Any]:
         """Remove the type alias from a `type Type = T` type alias.
@@ -297,7 +299,7 @@ class TypeView(Generic[T]):
         """
         if not self.is_type_alias:
             return self
-        return TypeView(self.annotation.__value__)
+        return TypeView(self.annotation.__value__, metadata=self.metadata)
 
 
 def _is_typing_extensins_type_alias(type_view: TypeView[Any]) -> bool:
