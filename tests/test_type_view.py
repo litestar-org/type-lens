@@ -346,6 +346,13 @@ def test_strip_optional() -> None:
     assert TypeView(Optional[Union[str, int]]).strip_optional() == TypeView(Union[str, int])
     assert TypeView(Union[str, int, None]).strip_optional() == TypeView(Union[str, int])
 
+    # Retain metadata
+    assert (
+        TypeView(Annotated[Union[int, None], 4]).strip_optional().metadata
+        == TypeView(int, metadata=[4]).metadata
+        == (4,)
+    )
+
 
 def test_repr() -> None:
     assert repr(TypeView(int)) == "TypeView(int)"
@@ -453,6 +460,9 @@ def test_strip_type_alias() -> None:
     assert TypeView(Foo).strip_type_alias() == TypeView(int)  # pyright: ignore
     assert TypeView(int).strip_type_alias() == TypeView(int)
 
+    # Retain metadata
+    assert TypeView(Annotated[Foo, 4]).strip_type_alias().metadata == TypeView(int, metadata=[4]).metadata == (4,)
+
 
 def test_strip_type_alias_extensions() -> None:
     from typing_extensions import TypeAliasType
@@ -460,3 +470,6 @@ def test_strip_type_alias_extensions() -> None:
     Foo = TypeAliasType("Foo", int)  # pyright: ignore
     assert TypeView(Foo).strip_type_alias() == TypeView(int)
     assert TypeView(int).strip_type_alias() == TypeView(int)
+
+    # Retain metadata
+    assert TypeView(Annotated[Foo, 4]).strip_type_alias().metadata == TypeView(int, metadata=[4]).metadata == (4,)
