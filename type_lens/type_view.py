@@ -45,16 +45,13 @@ class TypeView(Generic[T]):
     }
 
     def __init__(self, annotation: T, *, metadata: Sequence[Any] = ()) -> None:
-        """Initialize ParsedType.
+        """Initialize TypeView.
 
         Args:
             annotation: The type annotation. This should be extracted from the return of
                 ``get_type_hints(..., include_extras=True)`` so that forward references are resolved and recursive
                 ``Annotated`` types are flattened.
             metadata: Additional metadata to associate with the annotation.
-
-        Returns:
-            ParsedType
         """
         unwrapped, annotation_metadata, wrappers = unwrap_annotation(annotation)
         origin = get_origin(unwrapped)
