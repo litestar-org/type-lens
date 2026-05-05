@@ -7,7 +7,7 @@ import typing_extensions as te
 
 from type_lens.types.builtins import UNION_TYPES
 
-__all__ = ("unwrap_annotation", "SAFE_GENERIC_ORIGIN_MAP", "INSTANTIABLE_TYPE_MAPPING")
+__all__ = ("INSTANTIABLE_TYPE_MAPPING", "SAFE_GENERIC_ORIGIN_MAP", "unwrap_annotation")
 
 SAFE_GENERIC_ORIGIN_MAP: te.Final[dict[object, object]] = {
     set: t.AbstractSet,
@@ -38,7 +38,7 @@ SAFE_GENERIC_ORIGIN_MAP: te.Final[dict[object, object]] = {
     abc.AsyncIterable: t.AsyncIterable,
     abc.AsyncIterator: t.AsyncIterator,
     abc.Awaitable: t.Awaitable,
-    **{union_t: t.Union for union_t in UNION_TYPES},
+    **dict.fromkeys(UNION_TYPES, t.Union),
 }
 """A mapping of types to equivalent types that are safe to be used as generics across all Python versions.
 

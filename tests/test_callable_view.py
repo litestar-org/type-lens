@@ -59,10 +59,10 @@ def test_typed_param() -> None:
 
 
 def test_fix_annotated_optional_type_hints() -> None:
-    def fn1(foo: Annotated[Optional[int], "d"] = None) -> Optional[int]:  # noqa: UP007
+    def fn1(foo: Annotated[Optional[int], "d"] = None) -> Optional[int]:
         return foo
 
-    def fn2(foo: Annotated[Optional[int], "d"] = None) -> Optional[int]:  # noqa: UP007
+    def fn2(foo: Annotated[Optional[int], "d"] = None) -> Optional[int]:
         return foo
 
     fn_view1 = CallableView.from_callable(fn1, include_extras=True)

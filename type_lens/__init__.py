@@ -7,8 +7,8 @@ from .types.empty import Empty, EmptyType
 
 __all__ = (
     "CallableView",
+    "Empty",
+    "EmptyType",
     "ParameterView",
     "TypeView",
-    "EmptyType",
-    "Empty",
 )
