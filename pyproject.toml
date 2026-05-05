@@ -1,41 +1,33 @@
 [project]
-authors = [
-    { name = "Peter Schutt", email = "peter.github@proton.me" },
-]
+authors = [{ name = "Peter Schutt", email = "peter.github@proton.me" }]
 maintainers = [
-    { name = "Litestar Developers", email = "hello@litestar.dev" },
-    { name = "Cody Fincher", email = "cody@litestar.dev" },
-    { name = "Jacob Coffee", email = "jacob@litestar.dev" },
-    { name = "Janek Nouvertné", email = "provinzkraut@litestar.dev" },
-    { name = "Peter Schutt", email = "peter@litestar.dev" },
-    { name = "Visakh Unnikrishnan", email = "guacs@litestar.dev" },
-    { name = "Alc", email = "alc@litestar.dev" },
-    { name = "Dan Cardin", email = "ddcardin@gmail.com" },
+  { name = "Litestar Developers", email = "hello@litestar.dev" },
+  { name = "Cody Fincher", email = "cody@litestar.dev" },
+  { name = "Jacob Coffee", email = "jacob@litestar.dev" },
+  { name = "Janek Nouvertné", email = "provinzkraut@litestar.dev" },
+  { name = "Peter Schutt", email = "peter@litestar.dev" },
+  { name = "Visakh Unnikrishnan", email = "guacs@litestar.dev" },
+  { name = "Alc", email = "alc@litestar.dev" },
+  { name = "Dan Cardin", email = "ddcardin@gmail.com" },
 ]
-keywords = [
-    "programming",
-    "developer",
-    "tools",
-    "litestar-org",
-    "type-lens",
-]
+keywords = ["programming", "developer", "tools", "litestar-org", "type-lens"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Environment :: Web Environment",
-    "License :: OSI Approved :: MIT License",
-    "Natural Language :: English",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python",
-    "Topic :: Internet :: WWW/HTTP",
-    "Topic :: Software Development",
-    "Typing :: Typed",
-    "Intended Audience :: Developers",
+  "Development Status :: 3 - Alpha",
+  "Environment :: Web Environment",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Software Development",
+  "Typing :: Typed",
+  "Intended Audience :: Developers",
 ]
 name = "type-lens"
 version = "0.2.6"
@@ -43,10 +35,7 @@ description = "type-lens is a Python template project designed to simplify the s
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.8,<4.0"
-dependencies = [
-  "eval-type-backport; python_version<'3.10'",
-  "typing-extensions >= 4.1.0",
-]
+dependencies = ["eval-type-backport; python_version<'3.10'", "typing-extensions >= 4.1.0"]
 
 [project.urls]
 "Issue Tracker" = "https://github.com/litestar-org/type-lens/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc"
@@ -57,40 +46,22 @@ homepage = "https://litestar.dev/"
 repository = "https://github.com/litestar-org/type-lens"
 documentation = "https://docs.type-lens.litestar.dev/"
 
-[tool.pdm.dev-dependencies]
+[dependency-groups]
 docs = [
-    "auto-pytabs[sphinx]>=0.4.0",
-    "sphinx-autobuild>=2021.3.14",
-    "sphinx-click>=4.4.0",
-    "sphinx-copybutton>=0.5.2",
-    "sphinx-design>=0.5.0",
-    "sphinx-toolbox>=3.5.0",
-    "sphinx>=7.1.2",
-    "sphinxcontrib-mermaid>=0.9.2",
-    "sphinx-paramlinks>=0.6.0",
-    "sphinx-togglebutton>=0.3.2",
-    #    "litestar-sphinx-theme @ {root:uri}/../litestar-sphinx-theme", # only needed when working on the theme
-    "litestar-sphinx-theme @ git+https://github.com/litestar-org/litestar-sphinx-theme.git@v3",
+  "auto-pytabs[sphinx]>=0.4.0",
+  "sphinx-autobuild>=2021.3.14",
+  "sphinx-click>=4.4.0",
+  "sphinx-copybutton>=0.5.2",
+  "sphinx-design>=0.5.0",
+  "sphinx-toolbox>=3.8.0",
+  "sphinx>=7.1.2,<9",
+  "sphinxcontrib-mermaid>=0.9.2",
+  "sphinx-paramlinks>=0.6.0",
+  "sphinx-togglebutton>=0.3.2",
+  "litestar-sphinx-theme @ git+https://github.com/litestar-org/litestar-sphinx-theme.git@v3",
 ]
-lint = [
-    "codecov-cli",
-    "mypy == 1.11.2",
-    "pre-commit",
-    "pyright",
-    "ruff",
-    "slotscheck",
-]
-test = [
-    "covdefaults",
-    "pytest",
-    "pytest-cov",
-]
-
-[tool.pdm.scripts]
-ci = { composite = ["lint", "test"] }
-docs-serve = "sphinx-autobuild docs docs/_build/ -j auto --watch dtos --watch docs --watch tests --port 8002"
-lint = "pre-commit run --all-files"
-test = "pytest"
+lint = ["mypy == 1.11.2", "pyright", "ruff", "slotscheck"]
+test = ["covdefaults", "pytest>=7,<8", "pytest-cov"]
 
 [build-system]
 build-backend = "hatchling.build"
@@ -98,7 +69,7 @@ requires = ["hatchling"]
 
 [tool.codespell]
 ignore-words-list = "te"
-skip = 'pdm.lock'
+skip = 'uv.lock'
 
 [tool.coverage.run]
 omit = ["*/tests/*"]
@@ -129,10 +100,7 @@ warn_unused_ignores = true
 [tool.pyright]
 typeCheckingMode = "strict"
 disableBytesTypePromotions = true
-exclude = [
-    "tools",
-    "docs",
-]
+exclude = ["tools", "docs"]
 include = ["type_lens", "tests"]
 pythonVersion = "3.8"
 reportUnnecessaryTypeIgnoreComments = true
@@ -143,61 +111,65 @@ strict-imports = false
 
 [tool.ruff]
 lint.select = [
-    "A", # flake8-builtins
-    "B", # flake8-bugbear
-    "BLE", # flake8-blind-except
-    "C4", # flake8-comprehensions
-    "C90", # mccabe
-    "D", # pydocstyle
-    "DJ", # flake8-django
-    "DTZ", # flake8-datetimez
-    "E", # pycodestyle errors
-    "ERA", # eradicate
-    "EXE", # flake8-executable
-    "F", # pyflakes
-    "G", # flake8-logging-format
-    "I", # isort
-    "ICN", # flake8-import-conventions
-    "ISC", # flake8-implicit-str-concat
-    "N", # pep8-naming
-    "PIE", # flake8-pie
-    "PLC", # pylint - convention
-    "PLE", # pylint - error
-    "PLW", # pylint - warning
-    "PTH", # flake8-use-pathlib
-    "Q", # flake8-quotes
-    "RET", # flake8-return
-    "RUF", # Ruff-specific rules
-    "S", # flake8-bandit
-    "SIM", # flake8-simplify
-    "T10", # flake8-debugger
-    "T20", # flake8-print
-    "TCH", # flake8-type-checking
-    "TID", # flake8-tidy-imports
-    "UP", # pyupgrade
-    "W", # pycodestyle - warning
-    "YTT", # flake8-2020
+  "A",   # flake8-builtins
+  "B",   # flake8-bugbear
+  "BLE", # flake8-blind-except
+  "C4",  # flake8-comprehensions
+  "C90", # mccabe
+  "D",   # pydocstyle
+  "DJ",  # flake8-django
+  "DTZ", # flake8-datetimez
+  "E",   # pycodestyle errors
+  "ERA", # eradicate
+  "EXE", # flake8-executable
+  "F",   # pyflakes
+  "G",   # flake8-logging-format
+  "I",   # isort
+  "ICN", # flake8-import-conventions
+  "ISC", # flake8-implicit-str-concat
+  "N",   # pep8-naming
+  "PIE", # flake8-pie
+  "PLC", # pylint - convention
+  "PLE", # pylint - error
+  "PLW", # pylint - warning
+  "PTH", # flake8-use-pathlib
+  "Q",   # flake8-quotes
+  "RET", # flake8-return
+  "RUF", # Ruff-specific rules
+  "S",   # flake8-bandit
+  "SIM", # flake8-simplify
+  "T10", # flake8-debugger
+  "T20", # flake8-print
+  "TCH", # flake8-type-checking
+  "TID", # flake8-tidy-imports
+  "UP",  # pyupgrade
+  "W",   # pycodestyle - warning
+  "YTT", # flake8-2020
 ]
 
 line-length = 120
 lint.ignore = [
-    "A003", # flake8-builtins - class attribute {name} is shadowing a python builtin
-    "B010", # flake8-bugbear - do not call setattr with a constant attribute value
-    "D100", # pydocstyle - missing docstring in public module
-    "D101", # pydocstyle - missing docstring in public class
-    "D102", # pydocstyle - missing docstring in public method
-    "D103", # pydocstyle - missing docstring in public function
-    "D104", # pydocstyle - missing docstring in public package
-    "D105", # pydocstyle - missing docstring in magic method
-    "D106", # pydocstyle - missing docstring in public nested class
-    "D107", # pydocstyle - missing docstring in __init__
-    "D202", # pydocstyle - no blank lines allowed after function docstring
-    "D205", # pydocstyle - 1 blank line required between summary line and description
-    "D415", # pydocstyle - first line should end with a period, question mark, or exclamation point
-    "E501", # pycodestyle line too long, handled by ruff format
-    "PLW2901", # pylint - for loop variable overwritten by assignment target
-    "RUF012", # Ruff-specific rule - annotated with classvar
-    "ISC001", # Ruff formatter incompatible
+  "A003",    # flake8-builtins - class attribute {name} is shadowing a python builtin
+  "A005",    # flake8-builtins - class attribute {name} is shadowing stdlib
+  "B010",    # flake8-bugbear - do not call setattr with a constant attribute value
+  "D100",    # pydocstyle - missing docstring in public module
+  "D101",    # pydocstyle - missing docstring in public class
+  "D102",    # pydocstyle - missing docstring in public method
+  "D103",    # pydocstyle - missing docstring in public function
+  "D104",    # pydocstyle - missing docstring in public package
+  "D105",    # pydocstyle - missing docstring in magic method
+  "D106",    # pydocstyle - missing docstring in public nested class
+  "D107",    # pydocstyle - missing docstring in __init__
+  "D202",    # pydocstyle - no blank lines allowed after function docstring
+  "D205",    # pydocstyle - 1 blank line required between summary line and description
+  "D415",    # pydocstyle - first line should end with a period, question mark, or exclamation point
+  "E501",    # pycodestyle line too long, handled by ruff format
+  "PLW2901", # pylint - for loop variable overwritten by assignment target
+  "RUF012",  # Ruff-specific rule - annotated with classvar
+  "RUF023",  # Sorted slots
+  "ISC001",  # Ruff formatter incompatible
+
+  "PLW1641", # FIX: Missing __hash__
 ]
 src = ["type_lens", "tests", "docs/examples"]
 target-version = "py38"
@@ -209,9 +181,7 @@ convention = "google"
 max-complexity = 12
 
 [tool.ruff.lint.pep8-naming]
-classmethod-decorators = [
-    "classmethod",
-]
+classmethod-decorators = ["classmethod"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["type_lens", "tests"]
@@ -220,29 +190,31 @@ known-first-party = ["type_lens", "tests"]
 "docs/**/*.*" = ["S", "B", "DTZ", "A", "TCH", "ERA", "D", "RET"]
 "docs/examples/**" = ["T201"]
 "tests/**/*.*" = [
-    "A",
-    "ARG",
-    "B",
-    "BLE",
-    "C901",
-    "D",
-    "DTZ",
-    "EM",
-    "FBT",
-    "G",
-    "N",
-    "PGH",
-    "PIE",
-    "PLR",
-    "PLW",
-    "PTH",
-    "RSE",
-    "S",
-    "S101",
-    "SIM",
-    "TCH",
-    "TRY",
+  "A",
+  "ARG",
+  "B",
+  "BLE",
+  "C901",
+  "D",
+  "DTZ",
+  "EM",
+  "FBT",
+  "G",
+  "N",
+  "PGH",
+  "PIE",
+  "PLR",
+  "PLW",
+  "PTH",
+  "RSE",
+  "S",
+  "S101",
+  "SIM",
+  "TCH",
+  "TRY",
+  "UP045",
 ]
+"tests/test_type_view.py" = ["PLC0415", "E721"]
 "tools/**/*.*" = ["D", "ARG", "EM", "TRY", "G", "FBT"]
 "tools/prepare_release.py" = ["S603", "S607"]
 

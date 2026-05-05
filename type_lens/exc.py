@@ -1,7 +1,7 @@
 __all__ = (
+    "ParameterViewError",
     "TypeLensError",
     "TypeViewError",
-    "ParameterViewError",
 )
 
 

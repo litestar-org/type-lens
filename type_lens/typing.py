@@ -44,7 +44,7 @@ if sys.version_info >= (3, 10):
     _get_type_hints = typing.get_type_hints  # pyright: ignore
 
 else:
-    from eval_type_backport import eval_type_backport  # pyright: ignore
+    from eval_type_backport import eval_type_backport  # type: ignore[import-not-found]
 
     @typing.no_type_check
     def _get_type_hints(  # noqa: C901

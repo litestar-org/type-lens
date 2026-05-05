@@ -4,12 +4,9 @@ Contribution guide
 Setting up the environment
 --------------------------
 
-1. Install `Pizza Delivery Man <https://pdm.fming.dev/latest/>`_
-2. Run ``pdm install -G:all`` to create a `virtual environment <https://docs.python.org/3/tutorial/venv.html>`_ and install
+1. Install `uv <https://docs.astral.sh/uv/getting-started/installation/>`_
+2. Run ``make install`` to create a `virtual environment <https://docs.python.org/3/tutorial/venv.html>`_ and install
    the dependencies
-3. If you're working on the documentation and need to build it locally, install the extra dependencies with ``pdm install -G:docs``
-4. Install `pre-commit <https://pre-commit.com/>`_
-5. Run ``pre-commit install`` to install pre-commit hooks
 
 Code contributions
 ------------------
@@ -21,8 +18,7 @@ Workflow
 2. Clone your fork locally with git
 3. `Set up the environment <#setting-up-the-environment>`_
 4. Make your changes
-5. (Optional) Run ``pre-commit run --all-files`` to run linters and formatters. This step is optional and will be executed
-   automatically by git before you make a commit, but you may want to run it manually in order to apply fixes
+5. (Optional) Run ``make lint`` to run linters and type checkers, or ``make format`` to auto-format
 6. Commit your changes to git
 7. Push the changes to your fork
 8. Open a `pull request <https://docs.github.com/en/pull-requests>`_. Give the pull request a descriptive title
@@ -37,14 +33,18 @@ Guidelines for writing code
 ----------------------------
 
 - All code should be fully `typed <https://peps.python.org/pep-0484/>`_. This is enforced via
-  `mypy <https://mypy.readthedocs.io/en/stable/>`_.
+  `mypy <https://mypy.readthedocs.io/en/stable/>`_ and `pyright <https://github.com/microsoft/pyright>`_.
 - All code should be tested. This is enforced via `pytest <https://docs.pytest.org/en/stable/>`_.
-- All code should be properly formatted. This is enforced via `black <https://black.readthedocs.io/en/stable/>`_ and `Ruff <https://beta.ruff.rs/docs/>`_.
+- All code should be properly formatted. This is enforced via `Ruff <https://docs.astral.sh/ruff/>`_.
 
 Writing and running tests
 +++++++++++++++++++++++++
 
-.. todo:: Write this section
+Run the test suite with:
+
+.. code-block:: shell
+
+    make test
 
 Project documentation
 ---------------------
@@ -57,11 +57,7 @@ The documentation is located in the ``/docs`` directory and is `ReST <https://do
 Running the docs locally
 ++++++++++++++++++++++++
 
-To run or build the docs locally, you need to first install the required dependencies:
-
-``pdm install -G:docs``
-
-Then you can serve the documentation with ``make docs-serve``, or build them with ``make docs``.
+You can serve the documentation with ``make docs-serve``, or build them with ``make docs``.
 
 Creating a new release
 ----------------------
