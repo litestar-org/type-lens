@@ -37,6 +37,16 @@ class ParameterView:
         default: Any | EmptyType = Empty,
         has_annotation: bool = True,
     ) -> None:
+        """Initialize ParameterView.
+
+        Args:
+            name: The parameter name.
+            type_view: View of the parameter's type annotation.
+            default: The parameter's default value, or :data:`Empty` if no default.
+            has_annotation: Whether the parameter had an explicit annotation. Lack of an
+                annotation implies ``TypeView(Any)``, but that is distinct from an explicit
+                ``Any`` annotation.
+        """
         self.name: Final = name
         self.type_view: Final = type_view
         self.default: Final = default

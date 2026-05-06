@@ -16,7 +16,16 @@ if TYPE_CHECKING:
 
 
 class CallableView:
-    def __init__(self, fn: Callable[..., Any], type_hints: dict[str, type]):
+    """Represents a callable's signature, including all parameters and return type."""
+
+    def __init__(self, fn: Callable[..., Any], type_hints: dict[str, type]) -> None:
+        """Initialize CallableView.
+
+        Args:
+            fn: The callable to introspect.
+            type_hints: Mapping of parameter names to types, as returned by ``get_type_hints()``.
+                The ``"return"`` key, if present, is consumed as the return type annotation.
+        """
         self.callable = fn
         self.signature = getattr(fn, "__signature__", None) or inspect.signature(fn)
 
@@ -51,6 +60,17 @@ class CallableView:
         localns: dict[str, Any] | None = None,
         include_extras: bool = False,
     ) -> Self:
+        """Construct a :class:`CallableView` from a callable, resolving type hints automatically.
+
+        Args:
+            fn: The callable to introspect.
+            globalns: Optional global namespace for resolving forward references.
+            localns: Optional local namespace for resolving forward references.
+            include_extras: Whether to preserve ``Annotated`` metadata in resolved type hints.
+
+        Returns:
+            A new :class:`CallableView` instance.
+        """
         hint_fn = fn
         if not isinstance(fn, (type, types.FunctionType)):
             callable_ = getattr(fn, "__func__", None) or getattr(fn, "__call__", None)  # noqa: B004

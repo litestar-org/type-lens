@@ -49,6 +49,7 @@ documentation = "https://docs.type-lens.litestar.dev/"
 [dependency-groups]
 docs = [
   "auto-pytabs[sphinx]>=0.4.0",
+  "sphinx-autoapi>=3.0.0",
   "sphinx-autobuild>=2021.3.14",
   "sphinx-click>=4.4.0",
   "sphinx-copybutton>=0.5.2",

@@ -29,7 +29,7 @@ release = os.getenv("_TYPE_LENS_DOCS_BUILD_VERSION", __version__.rsplit(".")[0])
 
 # -- General configuration ---------------------------------------------------
 extensions = [
-    "sphinx.ext.autodoc",
+    "autoapi.extension",
     "sphinx.ext.napoleon",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.githubpages",
@@ -37,8 +37,6 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
     "sphinx.ext.todo",
-    "sphinx.ext.viewcode",
-    "sphinx_click",
     "sphinx_toolbox.collapse",
     "sphinx_design",
     "sphinx_togglebutton",
@@ -55,7 +53,16 @@ PY_ATTR = "py:attr"
 PY_OBJ = "py:obj"
 
 nitpicky = True
-nitpick_ignore = []
+nitpick_ignore = [
+    # autoapi generates :py:class: refs for these, but they are not class objects.
+    # TypeVar and Ellipsis (...) are data objects; TypeAlias and re-exported types
+    # are documented at the root type_lens namespace, not their submodule paths.
+    # These cannot be resolved without patching autoapi templates.
+    ("py:class", "T"),
+    ("py:class", "Ellipsis"),
+    ("py:class", "type_lens.types.empty.EmptyType"),
+    ("py:class", "type_lens.type_view.TypeView"),
+]
 nitpick_ignore_regex = []
 
 napoleon_google_docstring = True
@@ -65,12 +72,20 @@ napoleon_use_admonition_for_notes = True
 napoleon_use_admonition_for_references = False
 napoleon_attr_annotations = True
 
-autoclass_content = "class"
-autodoc_class_signature = "separated"
-autodoc_default_options = {"special-members": "__init__", "show-inheritance": True, "members": True}
-autodoc_member_order = "bysource"
-autodoc_typehints_format = "short"
-autodoc_type_aliases = {"FilterTypes": "FilterTypes"}
+autoapi_dirs = ["../type_lens"]
+autoapi_root = "reference"
+autoapi_options = [
+    "members",
+    "undoc-members",
+    "show-inheritance",
+    "show-module-summary",
+    "special-members",
+    "imported-members",
+]
+autoapi_own_page_level = "class"
+autoapi_python_class_content = "both"
+autoapi_generate_api_docs = False
+autoapi_add_toctree_entry = False
 
 autosectionlabel_prefix_document = True
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
