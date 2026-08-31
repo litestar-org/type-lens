@@ -12,8 +12,6 @@ maintainers = [
 ]
 keywords = ["programming", "developer", "tools", "litestar-org", "type-lens"]
 classifiers = [
-  "Development Status :: 3 - Alpha",
-  "Environment :: Web Environment",
   "License :: OSI Approved :: MIT License",
   "Natural Language :: English",
   "Operating System :: OS Independent",
@@ -24,14 +22,13 @@ classifiers = [
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python",
-  "Topic :: Internet :: WWW/HTTP",
   "Topic :: Software Development",
   "Typing :: Typed",
   "Intended Audience :: Developers",
 ]
 name = "type-lens"
-version = "0.2.6"
-description = "type-lens is a Python template project designed to simplify the setup of a new project."
+version = "0.2.7"
+description = "type-lens is a library that allows for utilizing Python types at runtime."
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.8,<4.0"
