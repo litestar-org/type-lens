@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import functools
+import inspect
 import sys
 from dataclasses import dataclass
 from typing import Any, List, Optional, Type, Union, cast
@@ -143,3 +145,72 @@ def test_evaluated_runtime_type() -> None:
         assert fn_view1.parameters == (ParameterView("a", TypeView(Union[List[int], None]), default=None),)  # pyright: ignore
     else:
         assert fn_view1.parameters == (ParameterView("a", TypeView(Union[list[int], None]), default=None),)  # pyright: ignore
+
+
+def test_callable_wrapper_with_wrapped() -> None:
+    class Wrapper:
+        def __init__(self, wrapped: Any) -> None:
+            functools.update_wrapper(self, wrapped)
+
+        def __call__(self, *args: Any, **kwargs: Any) -> Any:
+            return self.__wrapped__(*args, **kwargs)
+
+    def foo(a: int, b: int) -> int:
+        return a + b
+
+    wrapped_foo = Wrapper(foo)
+    foo_view = CallableView.from_callable(foo)
+    wrapped_foo_view = CallableView.from_callable(wrapped_foo)
+
+    assert wrapped_foo_view.parameters == foo_view.parameters
+    assert wrapped_foo_view.return_type == foo_view.return_type
+    assert wrapped_foo_view.parameters == (
+        ParameterView("a", TypeView(int)),
+        ParameterView("b", TypeView(int)),
+    )
+    assert wrapped_foo_view.return_type == TypeView(int)
+
+
+def test_plain_callable_wrapper_with_wrapped_attribute() -> None:
+    class PlainWrapper:
+        def __init__(self, wrapped: Any) -> None:
+            self.__wrapped__ = wrapped
+
+        def __call__(self, *args: Any, **kwargs: Any) -> Any:
+            return self.__wrapped__(*args, **kwargs)
+
+    def foo(a: int, b: str = "default") -> bool:
+        return True
+
+    wrapped_foo = PlainWrapper(foo)
+    wrapped_foo_view = CallableView.from_callable(wrapped_foo)
+
+    assert wrapped_foo_view.parameters == (
+        ParameterView("a", TypeView(int)),
+        ParameterView("b", TypeView(str), default="default"),
+    )
+    assert wrapped_foo_view.return_type == TypeView(bool)
+
+
+def test_wrapper_with_signature_override() -> None:
+    class IntWrapper:
+        def __init__(self, wrapped: Any) -> None:
+            functools.update_wrapper(self, wrapped)
+            self.__signature__ = inspect.signature(wrapped).replace(
+                return_annotation=int,
+            )
+
+        def __call__(self, *args: Any, **kwargs: Any) -> int:
+            return int(self.__wrapped__(*args, **kwargs))
+
+    def foo(a: int, b: int) -> int | str:
+        return a + b
+
+    wrapped_foo = IntWrapper(foo)
+    wrapped_foo_view = CallableView.from_callable(wrapped_foo)
+
+    assert wrapped_foo_view.parameters == (
+        ParameterView("a", TypeView(int)),
+        ParameterView("b", TypeView(int)),
+    )
+    assert wrapped_foo_view.return_type == TypeView(int)
