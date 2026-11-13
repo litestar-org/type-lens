@@ -149,6 +149,8 @@ def test_evaluated_runtime_type() -> None:
 
 def test_callable_wrapper_with_wrapped() -> None:
     class Wrapper:
+        __wrapped__: Any
+
         def __init__(self, wrapped: Any) -> None:
             functools.update_wrapper(self, wrapped)
 
@@ -194,6 +196,8 @@ def test_plain_callable_wrapper_with_wrapped_attribute() -> None:
 
 def test_wrapper_with_signature_override() -> None:
     class IntWrapper:
+        __wrapped__: Any
+
         def __init__(self, wrapped: Any) -> None:
             functools.update_wrapper(self, wrapped)
             self.__signature__ = inspect.signature(wrapped).replace(
