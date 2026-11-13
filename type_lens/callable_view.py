@@ -30,6 +30,8 @@ class CallableView:
         self.signature = getattr(fn, "__signature__", None) or inspect.signature(fn)
 
         return_annotation = type_hints.pop("return", None)
+        if hasattr(fn, "__signature__") and self.signature.return_annotation is not inspect.Signature.empty:
+            return_annotation = self.signature.return_annotation
         self.return_type = TypeView(return_annotation)
 
         self.parameters = tuple(
@@ -71,11 +73,11 @@ class CallableView:
         Returns:
             A new :class:`CallableView` instance.
         """
-        hint_fn = fn
-        if not isinstance(fn, (type, types.FunctionType)):
-            callable_ = getattr(fn, "__func__", None) or getattr(fn, "__call__", None)  # noqa: B004
+        hint_fn = inspect.unwrap(fn) if hasattr(fn, "__wrapped__") else fn
+        if not isinstance(hint_fn, (type, types.FunctionType)):
+            callable_ = getattr(hint_fn, "__func__", None) or getattr(hint_fn, "__call__", None)  # noqa: B004
             if not callable_:
-                raise ValueError(f"{fn} is not a valid callable.")
+                raise ValueError(f"{hint_fn} is not a valid callable.")
 
             hint_fn = callable_
 

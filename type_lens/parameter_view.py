@@ -90,7 +90,12 @@ class ParameterView:
         Returns:
             ParsedSignatureParameter.
         """
-        annotation = fn_type_hints.get(parameter.name, Any)
+        if parameter.name in fn_type_hints:
+            annotation = fn_type_hints[parameter.name]
+        elif parameter.annotation is not Signature.empty:
+            annotation = parameter.annotation
+        else:
+            annotation = Any
 
         return cls(
             name=parameter.name,
